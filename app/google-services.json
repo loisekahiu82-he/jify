@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "545402512226",
+    "project_id": "jigy-d39aa",
+    "storage_bucket": "jigy-d39aa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:545402512226:android:de9c9eed8dcc7ae7cf423b",
+        "android_client_info": {
+          "package_name": "com.example.gigify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7VedXVctFpzZMC_MIWVRxc8iP8fUAXqw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
