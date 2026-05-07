@@ -1,18 +1,43 @@
-package com.example.gigify.screens.screens.dashboard
+package com.example.gigify.Screens.Screens.Dashboard
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Dashboard
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Payments
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,11 +53,21 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.gigify.Models.User
 import com.example.gigify.Models.ViewModels.AuthViewModel
 import com.example.gigify.Models.ViewModels.DashboardViewModel
-import com.example.gigify.Navigation.*
+import com.example.gigify.Navigation.ROUTE_CHAT
+import com.example.gigify.Navigation.ROUTE_EDIT_PROFILE
+import com.example.gigify.Navigation.ROUTE_HOME
+import com.example.gigify.Navigation.ROUTE_MY_JOBS
+import com.example.gigify.Navigation.ROUTE_PAYMENT
+import com.example.gigify.Navigation.ROUTE_POST_JOB
 import com.example.gigify.R
-import com.example.gigify.ui.theme.*
+import com.example.gigify.ui.theme.DarkPurple
+import com.example.gigify.ui.theme.GigifyTheme
+import com.example.gigify.ui.theme.MainPurple
+import com.example.gigify.ui.theme.White
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun ClientDashboardScreen(navController: NavController) {
@@ -88,7 +123,7 @@ fun DashboardContent(
     statsLabel: String,
     onLogout: () -> Unit
 ) {
-    var selectedItem by remember { mutableIntStateOf(0) }
+    var selectedItem by remember { mutableIntStateOf(1) }
 
     Scaffold(
         topBar = {
@@ -137,7 +172,7 @@ fun DashboardContent(
             ) {
                 NavigationBarItem(
                     selected = selectedItem == 0,
-                    onClick = { 
+                    onClick = {
                         selectedItem = 0
                         navController.navigate(ROUTE_HOME)
                     },
@@ -166,7 +201,7 @@ fun DashboardContent(
                 )
                 NavigationBarItem(
                     selected = selectedItem == 2,
-                    onClick = { 
+                    onClick = {
                         selectedItem = 2
                         navController.navigate(ROUTE_EDIT_PROFILE)
                     },
@@ -194,7 +229,7 @@ fun DashboardContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(8.dp))
-            
+
             Image(
                 painter = painterResource(id = R.drawable.gigify_logo),
                 contentDescription = "App Logo",
@@ -212,7 +247,7 @@ fun DashboardContent(
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
             )
-            
+
             Text(
                 text = "Account Overview",
                 fontSize = 14.sp,
@@ -242,8 +277,8 @@ fun DashboardContent(
                         shape = RoundedCornerShape(8.dp)
                     ) {
                         Text(
-                            text = "Status: Active", 
-                            color = White, 
+                            text = "Status: Active",
+                            color = White,
                             fontSize = 11.sp,
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                         )
@@ -252,7 +287,7 @@ fun DashboardContent(
             }
 
             Spacer(modifier = Modifier.height(24.dp))
-            
+
             Row(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = "Quick Actions",
@@ -261,7 +296,7 @@ fun DashboardContent(
                     color = Color.Black
                 )
             }
-            
+
             Spacer(modifier = Modifier.height(12.dp))
 
             Row(
@@ -322,10 +357,10 @@ fun DashboardContent(
                     text = "Settings",
                     icon = Icons.Default.Settings,
                     color = MainPurple,
-                    onClick = { navController.navigate(ROUTE_SETTINGS) }
+                    onClick = { navController.navigate(ROUTE_EDIT_PROFILE) }
                 )
             }
-            
+
             Spacer(modifier = Modifier.height(24.dp))
         }
     }

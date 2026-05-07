@@ -1,8 +1,8 @@
-package com.example.gigify.screens
+package com.example.gigify.Screens.Screens
 
-import android.window.SplashScreenView
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -16,7 +16,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.gigify.Navigation.ROUTE_HOME
 import com.example.gigify.Navigation.ROUTE_REGISTER
-import com.example.gigify.Screens.Screens.Login.LoginActivityScreen
+import com.example.gigify.Navigation.ROUTE_SPLASH
 import com.example.gigify.ui.theme.*
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
@@ -28,18 +28,12 @@ fun SplashScreen(navController: NavController) {
     )
 
     LaunchedEffect(Unit) {
-        delay(2000) // 2 seconds delay
-        
-        // Check session to avoid forcing user to register every time
+        delay(2000) 
         val currentUser = FirebaseAuth.getInstance().currentUser
-        if (currentUser != null) {
-            navController.navigate(ROUTE_HOME) {
-                popUpTo("splash") { inclusive = true }
-            }
-        } else {
-            navController.navigate(ROUTE_REGISTER) {
-                popUpTo("splash") { inclusive = true }
-            }
+        val destination = if (currentUser != null) ROUTE_HOME else ROUTE_REGISTER
+        
+        navController.navigate(destination) {
+            popUpTo(ROUTE_SPLASH) { inclusive = true }
         }
     }
 
@@ -57,6 +51,7 @@ fun SplashScreen(navController: NavController) {
         )
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun SplashScreenPreview() {

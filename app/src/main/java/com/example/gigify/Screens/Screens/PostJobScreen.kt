@@ -1,6 +1,5 @@
-package com.example.gigify.screens
+package com.example.gigify.Screens.Screens
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -117,8 +116,11 @@ fun PostJobScreen(navController: NavController, initialCategory: String = "") {
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun PostJobPreview() {
-    PostJobScreen(navController = rememberNavController())
+    GigifyTheme {
+        PostJobScreen(navController = rememberNavController())
+    }
 }

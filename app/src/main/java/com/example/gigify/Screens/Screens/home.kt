@@ -1,8 +1,17 @@
 package com.example.gigify.Screens.Screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -10,8 +19,22 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,15 +42,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.gigify.R
 import com.example.gigify.Models.ViewModels.AuthViewModel
 import com.example.gigify.Navigation.ROUTE_POST_JOB
+import com.example.gigify.R
 import com.example.gigify.ui.components.CategoryChip
 import com.example.gigify.ui.components.InfoBanner
 import com.example.gigify.ui.components.WorkerCard
@@ -40,10 +61,10 @@ import com.example.gigify.ui.theme.White
 @Composable
 fun Home(
     navController: NavController,
-    authViewModel: AuthViewModel = viewModel()
+    authVm: AuthViewModel = viewModel()
 ) {
-    val currentUser by authViewModel.currentUserData.collectAsState()
-    val firstName = currentUser?.name?.split(" ")?.firstOrNull() ?: "User"
+    val user by authVm.currentUserData.collectAsState()
+    val firstName = user?.name?.split(" ")?.firstOrNull() ?: "User"
 
     val workers = listOf(
         WorkerDisplay("John Mwangi", "Plumber", "1.2km away", "4.8", "42", "Available now", "JM"),
@@ -51,16 +72,16 @@ fun Home(
         WorkerDisplay("Peter Otieno", "Painter", "2.1km away", "4.6", "29", "Busy till 3pm", "PO", "Later", true)
     )
 
-    var searchQuery by remember { mutableStateOf("") }
-    var selectedCategory by remember { mutableStateOf("All") }
+    var search by remember { mutableStateOf("") }
+    var category by remember { mutableStateOf("All") }
     val categories = listOf("All", "Plumber", "Cleaner", "Painter", "Driver")
 
-    val filteredWorkers = workers.filter { worker ->
-        val matchesCategory = selectedCategory == "All" || worker.profession.equals(selectedCategory, ignoreCase = true)
-        val matchesSearch = searchQuery.isEmpty() || 
-                           worker.name.contains(searchQuery, ignoreCase = true) || 
-                           worker.profession.contains(searchQuery, ignoreCase = true)
-        matchesCategory && matchesSearch
+    val filteredList = workers.filter { w ->
+        val catMatch = category == "All" || w.profession.equals(category, ignoreCase = true)
+        val searchMatch = search.isEmpty() || 
+                           w.name.contains(search, ignoreCase = true) || 
+                           w.profession.contains(search, ignoreCase = true)
+        catMatch && searchMatch
     }
 
     Scaffold(
@@ -72,7 +93,7 @@ fun Home(
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Image(
                                 painter = painterResource(id = R.drawable.gigify_logo),
-                                contentDescription = "Gigify Logo",
+                                contentDescription = "Logo",
                                 modifier = Modifier
                                     .size(40.dp)
                                     .clip(CircleShape),
@@ -101,10 +122,10 @@ fun Home(
                 Text("+", fontSize = 24.sp)
             }
         }
-    ) { innerPadding ->
+    ) { padding ->
         Column(
             modifier = Modifier
-                .padding(innerPadding)
+                .padding(padding)
                 .padding(horizontal = 16.dp)
         ) {
             Spacer(modifier = Modifier.height(16.dp))
@@ -124,8 +145,8 @@ fun Home(
             Spacer(modifier = Modifier.height(20.dp))
             
             OutlinedTextField(
-                value = searchQuery,
-                onValueChange = { searchQuery = it },
+                value = search,
+                onValueChange = { search = it },
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = { Text("Search e.g. plumber, cleaner...", color = DarkPurple.copy(alpha = 0.4f)) },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = DarkPurple) },
@@ -145,11 +166,11 @@ fun Home(
             Spacer(modifier = Modifier.height(8.dp))
 
             LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                items(categories) { category ->
+                items(categories) { c ->
                     CategoryChip(
-                        label = category,
-                        isSelected = selectedCategory == category,
-                        onClick = { selectedCategory = category }
+                        label = c,
+                        isSelected = category == c,
+                        onClick = { category = c }
                     )
                 }
             }
@@ -157,7 +178,7 @@ fun Home(
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                if (filteredWorkers.isEmpty()) "No workers found" else "Available near you", 
+                if (filteredList.isEmpty()) "No workers found" else "Available near you", 
                 color = Color.Black,
                 fontWeight = FontWeight.Bold, 
                 fontSize = 16.sp
@@ -169,8 +190,8 @@ fun Home(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(bottom = 80.dp)
             ) {
-                items(filteredWorkers) { worker ->
-                    WorkerCard(worker, navController)
+                items(filteredList) { w ->
+                    WorkerCard(w, navController)
                 }
                 item {
                     Spacer(modifier = Modifier.height(16.dp))

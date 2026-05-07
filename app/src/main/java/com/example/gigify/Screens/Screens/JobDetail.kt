@@ -6,9 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -18,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.gigify.Models.Job
 import com.example.gigify.Models.ViewModels.JobViewModel
 import com.example.gigify.ui.theme.*
 
@@ -27,7 +26,7 @@ fun JobDetail(navController: NavController, jobId: String) {
     val jobViewModel: JobViewModel = viewModel()
     val job by jobViewModel.currentJob.collectAsState()
 
-    androidx.compose.runtime.LaunchedEffect(jobId) {
+    LaunchedEffect(jobId) {
         jobViewModel.getJobDetails(jobId)
     }
 
@@ -56,7 +55,8 @@ fun JobDetail(navController: NavController, jobId: String) {
                     .background(backgroundGradient)
                     .padding(innerPadding)
                     .padding(24.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.Start
             ) {
                 Card(
                     colors = CardDefaults.cardColors(containerColor = White.copy(alpha = 0.9f)),
@@ -92,12 +92,14 @@ fun JobDetail(navController: NavController, jobId: String) {
                     }
                 }
 
+                Spacer(modifier = Modifier.height(24.dp))
                 Text("Job Description", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                 Text(
                     currentJob.description.ifEmpty { "No description provided." },
                     color = Color.Black.copy(alpha = 0.8f),
                     lineHeight = 22.sp,
-                    fontSize = 15.sp
+                    fontSize = 15.sp,
+                    modifier = Modifier.padding(top = 8.dp)
                 )
 
                 Spacer(modifier = Modifier.weight(1f))

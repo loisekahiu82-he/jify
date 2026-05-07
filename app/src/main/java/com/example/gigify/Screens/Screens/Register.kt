@@ -1,16 +1,14 @@
 package com.example.gigify.Screens.Screens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -47,6 +45,10 @@ fun Register(
         navController = navController,
         authState = authState,
         onRegisterClick = { name, email, phoneNumber, location, selectedRole, password ->
+            if (password.length < 6) {
+                Toast.makeText(context, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show()
+                return@RegisterContent
+            }
             authViewModel.registerUser(
                 name,
                 email,
@@ -74,7 +76,6 @@ fun RegisterContent(
     var location by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var selectedRole by remember { mutableStateOf("Client") }
-    var expanded by remember { mutableStateOf(false) }
 
     val roles = listOf("Client", "Worker")
 
@@ -132,11 +133,7 @@ fun RegisterContent(
                 focusedBorderColor = MainPurple,
                 unfocusedBorderColor = LightPurple,
                 focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black,
-                focusedLabelColor = Color.Black,
-                unfocusedLabelColor = Color.Black.copy(alpha = 0.6f),
-                focusedContainerColor = White.copy(alpha = 0.5f),
-                unfocusedContainerColor = White.copy(alpha = 0.5f)
+                unfocusedTextColor = Color.Black
             )
         )
 
@@ -153,11 +150,7 @@ fun RegisterContent(
                 focusedBorderColor = MainPurple,
                 unfocusedBorderColor = LightPurple,
                 focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black,
-                focusedLabelColor = Color.Black,
-                unfocusedLabelColor = Color.Black.copy(alpha = 0.6f),
-                focusedContainerColor = White.copy(alpha = 0.5f),
-                unfocusedContainerColor = White.copy(alpha = 0.5f)
+                unfocusedTextColor = Color.Black
             )
         )
 
@@ -174,11 +167,7 @@ fun RegisterContent(
                 focusedBorderColor = MainPurple,
                 unfocusedBorderColor = LightPurple,
                 focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black,
-                focusedLabelColor = Color.Black,
-                unfocusedLabelColor = Color.Black.copy(alpha = 0.6f),
-                focusedContainerColor = White.copy(alpha = 0.5f),
-                unfocusedContainerColor = White.copy(alpha = 0.5f)
+                unfocusedTextColor = Color.Black
             )
         )
 
@@ -194,53 +183,32 @@ fun RegisterContent(
                 focusedBorderColor = MainPurple,
                 unfocusedBorderColor = LightPurple,
                 focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black,
-                focusedLabelColor = Color.Black,
-                unfocusedLabelColor = Color.Black.copy(alpha = 0.6f),
-                focusedContainerColor = White.copy(alpha = 0.5f),
-                unfocusedContainerColor = White.copy(alpha = 0.5f)
+                unfocusedTextColor = Color.Black
             )
         )
 
         Spacer(modifier = Modifier.height(16.dp))
-        Box(modifier = Modifier.fillMaxWidth()) {
-            OutlinedTextField(
-                value = selectedRole,
-                onValueChange = {},
-                label = { Text("I am a...") },
-                readOnly = true,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                trailingIcon = {
-                    IconButton(onClick = { expanded = true }) {
-                        Icon(Icons.Default.ArrowDropDown, contentDescription = null, tint = Color.Black)
-                    }
-                },
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MainPurple,
-                    unfocusedBorderColor = LightPurple,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    focusedLabelColor = Color.Black,
-                    unfocusedLabelColor = Color.Black.copy(alpha = 0.6f),
-                    focusedContainerColor = White.copy(alpha = 0.5f),
-                    unfocusedContainerColor = White.copy(alpha = 0.5f)
+        
+        Text(
+            text = "Register as a:",
+            color = DarkPurple,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 14.sp,
+            modifier = Modifier.align(Alignment.Start).padding(bottom = 8.dp)
+        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            roles.forEach { role ->
+                FilterChip(
+                    selected = selectedRole == role,
+                    onClick = { selectedRole = role },
+                    label = { Text(role, modifier = Modifier.padding(8.dp)) },
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(12.dp)
                 )
-            )
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-                modifier = Modifier.fillMaxWidth(0.8f).background(White)
-            ) {
-                roles.forEach { role ->
-                    DropdownMenuItem(
-                        text = { Text(role, color = Color.Black) },
-                        onClick = {
-                            selectedRole = role
-                            expanded = false
-                        }
-                    )
-                }
             }
         }
 
@@ -257,11 +225,7 @@ fun RegisterContent(
                 focusedBorderColor = MainPurple,
                 unfocusedBorderColor = LightPurple,
                 focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black,
-                focusedLabelColor = Color.Black,
-                unfocusedLabelColor = Color.Black.copy(alpha = 0.6f),
-                focusedContainerColor = White.copy(alpha = 0.5f),
-                unfocusedContainerColor = White.copy(alpha = 0.5f)
+                unfocusedTextColor = Color.Black
             )
         )
 

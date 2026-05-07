@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.gigify.Models.User
 import com.example.gigify.Models.ViewModels.AuthViewModel
 import com.example.gigify.ui.theme.*
 
