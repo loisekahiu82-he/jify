@@ -1,4 +1,4 @@
-package com.example.gigify.Screens.Screens.login
+package com.example.gigify.Screens.Screens.Login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

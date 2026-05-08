@@ -45,10 +45,10 @@ fun MpesaPaymentScreen(navController: NavController, jobId: String, amount: Stri
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text("M-Pesa Payment", color = AppPrimary, fontWeight = FontWeight.Bold) },
+                    title = { Text("M-Pesa Payment", color = Color.Black, fontWeight = FontWeight.Bold) },
                     navigationIcon = {
                         IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = AppPrimary)
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.Black)
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
@@ -67,13 +67,13 @@ fun MpesaPaymentScreen(navController: NavController, jobId: String, amount: Stri
                 Text(
                     text = "Amount to Pay",
                     fontSize = 14.sp,
-                    color = AppPrimary.copy(alpha = 0.7f)
+                    color = Color.Black.copy(alpha = 0.7f)
                 )
                 Text(
                     text = "KES $amount",
                     fontSize = 32.sp,
                     fontWeight = FontWeight.ExtraBold,
-                    color = AppPrimary
+                    color = Color.Black
                 )
                 
                 Spacer(modifier = Modifier.height(32.dp))
@@ -102,8 +102,8 @@ fun MpesaPaymentScreen(navController: NavController, jobId: String, amount: Stri
                         OutlinedTextField(
                             value = phoneNumber,
                             onValueChange = { phoneNumber = it },
-                            label = { Text("M-Pesa Number") },
-                            placeholder = { Text("2547XXXXXXXX") },
+                            label = { Text("M-Pesa Number", color = Color.Black) },
+                            placeholder = { Text("2547XXXXXXXX", color = Color.Black.copy(alpha = 0.4f)) },
                             modifier = Modifier.fillMaxWidth(),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                             shape = RoundedCornerShape(12.dp),
@@ -113,7 +113,7 @@ fun MpesaPaymentScreen(navController: NavController, jobId: String, amount: Stri
                                 unfocusedBorderColor = AppBackground,
                                 focusedTextColor = Color.Black,
                                 unfocusedTextColor = Color.Black,
-                                focusedLabelColor = AppPrimary,
+                                focusedLabelColor = Color.Black,
                                 unfocusedLabelColor = Color.Black.copy(alpha = 0.6f)
                             )
                         )
@@ -155,7 +155,7 @@ fun MpesaPaymentScreen(navController: NavController, jobId: String, amount: Stri
                         Text(
                             text = status,
                             modifier = Modifier.padding(16.dp),
-                            color = AppPrimary,
+                            color = Color.Black,
                             fontWeight = FontWeight.Medium,
                             textAlign = TextAlign.Center,
                             fontSize = 14.sp

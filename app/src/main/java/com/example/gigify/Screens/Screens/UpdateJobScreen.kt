@@ -10,7 +10,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -57,10 +56,10 @@ fun UpdateJobScreen(navController: NavController, jobId: String) {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text("Update Job", color = AppPrimary, fontWeight = FontWeight.Bold) },
+                    title = { Text("Update Job", color = Color.Black, fontWeight = FontWeight.Bold) },
                     navigationIcon = {
                         IconButton(onClick = { navController.navigateUp() }) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = AppPrimary)
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.Black)
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
@@ -78,7 +77,7 @@ fun UpdateJobScreen(navController: NavController, jobId: String) {
                 OutlinedTextField(
                     value = title,
                     onValueChange = { title = it },
-                    label = { Text("Title", color = AppPrimary.copy(alpha = 0.7f)) },
+                    label = { Text("Title", color = Color.Black) },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -86,8 +85,8 @@ fun UpdateJobScreen(navController: NavController, jobId: String) {
                         unfocusedBorderColor = AppSurface,
                         focusedTextColor = Color.Black,
                         unfocusedTextColor = Color.Black,
-                        focusedLabelColor = AppPrimary,
-                        unfocusedLabelColor = AppPrimary.copy(alpha = 0.6f),
+                        focusedLabelColor = Color.Black,
+                        unfocusedLabelColor = Color.Black.copy(alpha = 0.7f),
                         focusedContainerColor = AppSurface.copy(alpha = 0.9f),
                         unfocusedContainerColor = AppSurface.copy(alpha = 0.9f)
                     )
@@ -96,7 +95,7 @@ fun UpdateJobScreen(navController: NavController, jobId: String) {
                 OutlinedTextField(
                     value = category,
                     onValueChange = { category = it },
-                    label = { Text("Category", color = AppPrimary.copy(alpha = 0.7f)) },
+                    label = { Text("Category", color = Color.Black) },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -104,8 +103,8 @@ fun UpdateJobScreen(navController: NavController, jobId: String) {
                         unfocusedBorderColor = AppSurface,
                         focusedTextColor = Color.Black,
                         unfocusedTextColor = Color.Black,
-                        focusedLabelColor = AppPrimary,
-                        unfocusedLabelColor = AppPrimary.copy(alpha = 0.6f),
+                        focusedLabelColor = Color.Black,
+                        unfocusedLabelColor = Color.Black.copy(alpha = 0.7f),
                         focusedContainerColor = AppSurface.copy(alpha = 0.9f),
                         unfocusedContainerColor = AppSurface.copy(alpha = 0.9f)
                     )
@@ -114,7 +113,7 @@ fun UpdateJobScreen(navController: NavController, jobId: String) {
                 OutlinedTextField(
                     value = description,
                     onValueChange = { description = it },
-                    label = { Text("Description", color = AppPrimary.copy(alpha = 0.7f)) },
+                    label = { Text("Description", color = Color.Black) },
                     modifier = Modifier.fillMaxWidth().height(120.dp),
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -122,8 +121,8 @@ fun UpdateJobScreen(navController: NavController, jobId: String) {
                         unfocusedBorderColor = AppSurface,
                         focusedTextColor = Color.Black,
                         unfocusedTextColor = Color.Black,
-                        focusedLabelColor = AppPrimary,
-                        unfocusedLabelColor = AppPrimary.copy(alpha = 0.6f),
+                        focusedLabelColor = Color.Black,
+                        unfocusedLabelColor = Color.Black.copy(alpha = 0.7f),
                         focusedContainerColor = AppSurface.copy(alpha = 0.9f),
                         unfocusedContainerColor = AppSurface.copy(alpha = 0.9f)
                     )
@@ -132,7 +131,7 @@ fun UpdateJobScreen(navController: NavController, jobId: String) {
                 OutlinedTextField(
                     value = budget,
                     onValueChange = { if (it.all { char -> char.isDigit() || char == '.' }) budget = it },
-                    label = { Text("Budget (KES)", color = AppPrimary.copy(alpha = 0.7f)) },
+                    label = { Text("Budget (KES)", color = Color.Black) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
@@ -141,8 +140,8 @@ fun UpdateJobScreen(navController: NavController, jobId: String) {
                         unfocusedBorderColor = AppSurface,
                         focusedTextColor = Color.Black,
                         unfocusedTextColor = Color.Black,
-                        focusedLabelColor = AppPrimary,
-                        unfocusedLabelColor = AppPrimary.copy(alpha = 0.6f),
+                        focusedLabelColor = Color.Black,
+                        unfocusedLabelColor = Color.Black.copy(alpha = 0.7f),
                         focusedContainerColor = AppSurface.copy(alpha = 0.9f),
                         unfocusedContainerColor = AppSurface.copy(alpha = 0.9f)
                     )
@@ -151,7 +150,7 @@ fun UpdateJobScreen(navController: NavController, jobId: String) {
                 OutlinedTextField(
                     value = status,
                     onValueChange = { status = it },
-                    label = { Text("Status", color = AppPrimary.copy(alpha = 0.7f)) },
+                    label = { Text("Status", color = Color.Black) },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -159,8 +158,8 @@ fun UpdateJobScreen(navController: NavController, jobId: String) {
                         unfocusedBorderColor = AppSurface,
                         focusedTextColor = Color.Black,
                         unfocusedTextColor = Color.Black,
-                        focusedLabelColor = AppPrimary,
-                        unfocusedLabelColor = AppPrimary.copy(alpha = 0.6f),
+                        focusedLabelColor = Color.Black,
+                        unfocusedLabelColor = Color.Black.copy(alpha = 0.7f),
                         focusedContainerColor = AppSurface.copy(alpha = 0.9f),
                         unfocusedContainerColor = AppSurface.copy(alpha = 0.9f)
                     )
@@ -173,8 +172,16 @@ fun UpdateJobScreen(navController: NavController, jobId: String) {
                         if (title.isBlank() || description.isBlank() || budget.isBlank()) {
                             Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
                         } else {
-                            Toast.makeText(context, "Job updated successfully", Toast.LENGTH_SHORT).show()
-                            navController.navigateUp()
+                            val updates = mapOf(
+                                "title" to title,
+                                "category" to category,
+                                "description" to description,
+                                "budget" to (budget.toDoubleOrNull() ?: 0.0),
+                                "status" to status
+                            )
+                            jobViewModel.updateJob(jobId, updates, context) {
+                                navController.navigateUp()
+                            }
                         }
                     },
                     modifier = Modifier.fillMaxWidth().height(56.dp),

@@ -1,15 +1,21 @@
 package com.example.gigify.Models.ViewModels
 
 import android.content.Context
+import android.provider.ContactsContract
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.gigify.Models.Chat
+import com.example.gigify.Models.Contact
 import com.example.gigify.Models.Message
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ChatViewModel : ViewModel() {
     private val db = FirebaseFirestore.getInstance()
@@ -20,6 +26,9 @@ class ChatViewModel : ViewModel() {
 
     private val _messages = MutableStateFlow<List<Message>>(emptyList())
     val messages: StateFlow<List<Message>> = _messages
+
+    private val _contacts = MutableStateFlow<List<Contact>>(emptyList())
+    val contacts: StateFlow<List<Contact>> = _contacts
 
     private val _isSending = MutableStateFlow(false)
     val isSending: StateFlow<Boolean> = _isSending
@@ -42,6 +51,35 @@ class ChatViewModel : ViewModel() {
                 
                 _chats.value = chatList
             }
+    }
+
+    fun fetchContacts(context: Context) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val contactList = mutableListOf<Contact>()
+            val contentResolver = context.contentResolver
+            val cursor = contentResolver.query(
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                null,
+                null,
+                null,
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
+            )
+
+            cursor?.use {
+                val nameIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
+                val numberIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+
+                while (it.moveToNext()) {
+                    val name = it.getString(nameIndex)
+                    val number = it.getString(numberIndex)
+                    contactList.add(Contact(name, number))
+                }
+            }
+            
+            withContext(Dispatchers.Main) {
+                _contacts.value = contactList.distinctBy { it.phoneNumber }
+            }
+        }
     }
 
     fun listenToMessages(chatId: String) {

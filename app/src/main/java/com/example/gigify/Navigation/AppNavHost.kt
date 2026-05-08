@@ -45,6 +45,18 @@ fun AppNavHost(
         composable(ROUTE_EDIT_PROFILE) { EditProfile(navController) }
 
         composable(
+            route = "$ROUTE_PAYMENT_METHOD/{jobId}/{amount}",
+            arguments = listOf(
+                navArgument("jobId") { type = NavType.StringType },
+                navArgument("amount") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val jobId = backStackEntry.arguments?.getString("jobId") ?: ""
+            val amount = backStackEntry.arguments?.getString("amount") ?: ""
+            PaymentMethodScreen(navController, jobId, amount)
+        }
+
+        composable(
             route = "$ROUTE_PAYMENT/{jobId}/{amount}",
             arguments = listOf(
                 navArgument("jobId") { type = NavType.StringType; defaultValue = "unknown" },
@@ -58,6 +70,8 @@ fun AppNavHost(
 
         composable(ROUTE_MY_JOBS) { MyJobsScreen(navController) }
         
+        composable(ROUTE_CHAT_LIST) { ChatListScreen(navController) }
+
         composable(
             route = "$ROUTE_CHAT/{chatId}/{otherUserName}",
             arguments = listOf(

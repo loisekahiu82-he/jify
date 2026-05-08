@@ -30,7 +30,7 @@ fun SplashScreen(navController: NavController) {
     )
 
     LaunchedEffect(Unit) {
-        delay(2000) 
+        delay(500) // Reduced from 2000ms to 500ms for faster startup
         val currentUser = FirebaseAuth.getInstance().currentUser
         
         if (currentUser != null) {
@@ -56,7 +56,7 @@ fun SplashScreen(navController: NavController) {
                     }
                 }
         } else {
-            navController.navigate(ROUTE_REGISTER) {
+            navController.navigate(ROUTE_LOGIN) { // Changed fallback to login for better UX
                 popUpTo(ROUTE_SPLASH) { inclusive = true }
             }
         }

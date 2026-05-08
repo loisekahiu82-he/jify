@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Payment
 import androidx.compose.material3.*
@@ -32,8 +33,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.gigify.Models.Job
 import com.example.gigify.Models.ViewModels.AuthViewModel
 import com.example.gigify.Models.ViewModels.JobViewModel
-import com.example.gigify.Navigation.ROUTE_JOB_DETAIL
-import com.example.gigify.Navigation.ROUTE_PAYMENT
+import com.example.gigify.Navigation.*
 import com.example.gigify.R
 import com.example.gigify.ui.theme.*
 
@@ -59,7 +59,7 @@ fun MyJobsScreen(navController: NavController) {
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = if (userData?.name?.isNotEmpty() == true) "${userData?.name}'s Requests" else "My Job Requests",
+                            text = if (userData?.name?.isNotEmpty() == true) "${userData?.name}'s Uploads" else "My Uploads",
                             color = Color.Black, 
                             fontWeight = FontWeight.Bold
                         )
@@ -67,7 +67,7 @@ fun MyJobsScreen(navController: NavController) {
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = DarkPurple)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.Black)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = White)
@@ -87,12 +87,12 @@ fun MyJobsScreen(navController: NavController) {
                     text = "Hello, ${it.name}!",
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
-                    color = DarkPurple
+                    color = Color.Black
                 )
                 Text(
-                    text = "Manage your job requests here.",
+                    text = "Manage your job uploads here.",
                     fontSize = 14.sp,
-                    color = Color.Gray
+                    color = Color.Black.copy(alpha = 0.6f)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
             }
@@ -102,7 +102,7 @@ fun MyJobsScreen(navController: NavController) {
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(text = "No job requests found", color = Color.Gray, fontSize = 16.sp)
+                    Text(text = "No job uploads found", color = Color.Black.copy(alpha = 0.5f), fontSize = 16.sp)
                 }
             } else {
                 LazyColumn(
@@ -134,8 +134,8 @@ fun JobItem(job: Job, navController: NavController, onClick: () -> Unit, onDelet
             .fillMaxWidth()
             .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        colors = CardDefaults.cardColors(containerColor = AppSurface.copy(alpha = 0.5f)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
@@ -177,13 +177,21 @@ fun JobItem(job: Job, navController: NavController, onClick: () -> Unit, onDelet
                     
                     Box {
                         IconButton(onClick = { showMenu = true }) {
-                            Icon(Icons.Default.MoreVert, contentDescription = "Options", tint = Color.Gray)
+                            Icon(Icons.Default.MoreVert, contentDescription = "Options", tint = Color.Black)
                         }
                         DropdownMenu(
                             expanded = showMenu, 
                             onDismissRequest = { showMenu = false },
                             modifier = Modifier.background(White)
                         ) {
+                            DropdownMenuItem(
+                                text = { Text("Edit Details", color = Color.Black) },
+                                onClick = { 
+                                    navController.navigate("${ROUTE_UPDATE_JOB_STATUS}/${job.jobId}")
+                                    showMenu = false 
+                                },
+                                leadingIcon = { Icon(Icons.Default.Edit, contentDescription = null, tint = Color.Black) }
+                            )
                             if (job.status != "cancelled") {
                                 DropdownMenuItem(
                                     text = { Text("Cancel Job", color = Color.Black) },
@@ -206,7 +214,7 @@ fun JobItem(job: Job, navController: NavController, onClick: () -> Unit, onDelet
                 }
             }
             Spacer(modifier = Modifier.height(2.dp))
-            Text(text = job.category, color = DarkPurple, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+            Text(text = job.category, color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 13.sp)
             
             Spacer(modifier = Modifier.height(12.dp))
             
@@ -216,7 +224,7 @@ fun JobItem(job: Job, navController: NavController, onClick: () -> Unit, onDelet
                 verticalAlignment = Alignment.Bottom
             ) {
                 Column {
-                    Text(text = "BUDGET", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Gray)
+                    Text(text = "BUDGET", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Black.copy(alpha = 0.6f))
                     Text(
                         text = "KES ${job.budget}",
                         fontWeight = FontWeight.ExtraBold,
@@ -228,15 +236,15 @@ fun JobItem(job: Job, navController: NavController, onClick: () -> Unit, onDelet
                 if (job.status.lowercase() == "pending" || job.status.lowercase() == "ongoing") {
                     Button(
                         onClick = { 
-                            navController.navigate("${ROUTE_PAYMENT}/${job.jobId}/${job.budget}") 
+                            navController.navigate("${ROUTE_PAYMENT_METHOD}/${job.jobId}/${job.budget}")
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                        colors = ButtonDefaults.buttonColors(containerColor = AppPrimary),
                         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                         shape = RoundedCornerShape(8.dp)
                     ) {
-                        Icon(Icons.Default.Payment, contentDescription = null, modifier = Modifier.size(16.dp), tint = White)
+                        Icon(Icons.Default.Payment, contentDescription = null, modifier = Modifier.size(16.dp), tint = AppBackground)
                         Spacer(Modifier.width(8.dp))
-                        Text("Pay Now", color = White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                        Text("Pay Now", color = AppBackground, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }

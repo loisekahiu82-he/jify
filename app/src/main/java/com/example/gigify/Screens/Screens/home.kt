@@ -44,6 +44,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -69,7 +70,17 @@ fun Home(
     val workers = listOf(
         WorkerDisplay("John Mwangi", "Plumber", "1.2km away", "4.8", "42", "Available now", "JM"),
         WorkerDisplay("Amina Kioni", "Cleaner", "0.8km away", "4.9", "87", "Available now", "AK"),
-        WorkerDisplay("Peter Otieno", "Painter", "2.1km away", "4.6", "29", "Busy till 3pm", "PO", "Later", true)
+        WorkerDisplay(
+            "Peter Otieno",
+            "Painter",
+            "2.1km away",
+            "4.6",
+            "29",
+            "Busy till 3pm",
+            "PO",
+            "Later",
+            true
+        )
     )
 
     var search by remember { mutableStateOf("") }
@@ -78,9 +89,9 @@ fun Home(
 
     val filteredList = workers.filter { w ->
         val catMatch = category == "All" || w.profession.equals(category, ignoreCase = true)
-        val searchMatch = search.isEmpty() || 
-                           w.name.contains(search, ignoreCase = true) || 
-                           w.profession.contains(search, ignoreCase = true)
+        val searchMatch = search.isEmpty() ||
+                w.name.contains(search, ignoreCase = true) ||
+                w.profession.contains(search, ignoreCase = true)
         catMatch && searchMatch
     }
 
@@ -132,7 +143,7 @@ fun Home(
                     .padding(horizontal = 16.dp)
             ) {
                 Spacer(modifier = Modifier.height(16.dp))
-                
+
                 Text(
                     text = "Habari, $firstName",
                     color = AppPrimary,
@@ -146,13 +157,24 @@ fun Home(
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
-                
+
                 OutlinedTextField(
                     value = search,
                     onValueChange = { search = it },
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = { Text("Search e.g. plumber, cleaner...", color = Color.Black.copy(alpha = 0.4f)) },
-                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = Color.Black.copy(alpha = 0.6f)) },
+                    placeholder = {
+                        Text(
+                            "Search e.g. plumber, cleaner...",
+                            color = Color.Black.copy(alpha = 0.4f)
+                        )
+                    },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Default.Search,
+                            contentDescription = null,
+                            tint = Color.Black.copy(alpha = 0.6f)
+                        )
+                    },
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = AppPrimary,
                         unfocusedBorderColor = AppSurface,
@@ -169,7 +191,12 @@ fun Home(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                Text("Categories", color = AppPrimary, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text(
+                    "Categories",
+                    color = AppPrimary,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
                 Spacer(modifier = Modifier.height(8.dp))
 
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -185,9 +212,9 @@ fun Home(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Text(
-                    if (filteredList.isEmpty()) "No workers found" else "Available near you", 
+                    if (filteredList.isEmpty()) "No workers found" else "Available near you",
                     color = AppPrimary,
-                    fontWeight = FontWeight.Bold, 
+                    fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
                 Spacer(modifier = Modifier.height(12.dp))

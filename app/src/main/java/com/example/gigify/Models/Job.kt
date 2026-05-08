@@ -10,5 +10,6 @@ data class Job(
     val budget: Double = 0.0,
     val status: String = "pending",
     val location: String = "",
+    val jobImage: String? = null,
     val createdAt: Long = System.currentTimeMillis()
 )

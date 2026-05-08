@@ -124,34 +124,39 @@ class AuthViewModel : ViewModel() {
         }
 
         _authState.value = AuthState.Loading
-        auth.signInWithEmailAndPassword(email, pass)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val uid = auth.currentUser?.uid ?: ""
-                    db.collection("Users").document(uid).get()
-                        .addOnSuccessListener { snapshot ->
-                            val user = snapshot.toObject(User::class.java)
-                            _currentUserData.value = user
+        
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                // 1. Sign in
+                auth.signInWithEmailAndPassword(email, pass).await()
+                val uid = auth.currentUser?.uid ?: ""
+                
+                // 2. Fetch profile
+                val snapshot = db.collection("Users").document(uid).get().await()
+                val user = snapshot.toObject(User::class.java)
 
-                            val destination = when (user?.role?.lowercase()) {
-                                "worker" -> ROUTE_WORKER_DASHBOARD
-                                "client" -> ROUTE_CLIENT_DASHBOARD
-                                else -> ROUTE_HOME
-                            }
-                            
-                            _authState.value = AuthState.Success
-                            navController.navigate(destination) {
-                                popUpTo(ROUTE_LOGIN) { inclusive = true }
-                            }
-                        }
-                        .addOnFailureListener {
-                            _authState.value = AuthState.Error("Failed to fetch user profile")
-                        }
-                } else {
-                    _authState.value = AuthState.Error(task.exception?.message ?: "Login failed")
-                    Toast.makeText(context, "Invalid credentials", Toast.LENGTH_SHORT).show()
+                withContext(Dispatchers.Main) {
+                    // 3. Update local state
+                    _currentUserData.value = user
+                    _authState.value = AuthState.Success
+
+                    val destination = when (user?.role?.lowercase()) {
+                        "worker" -> ROUTE_WORKER_DASHBOARD
+                        "client" -> ROUTE_CLIENT_DASHBOARD
+                        else -> ROUTE_HOME
+                    }
+                    
+                    navController.navigate(destination) {
+                        popUpTo(ROUTE_LOGIN) { inclusive = true }
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _authState.value = AuthState.Error(e.message ?: "Login failed")
+                    Toast.makeText(context, "Invalid credentials or network error", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
     }
 
     fun uploadProfilePicture(uri: Uri, context: Context) {
