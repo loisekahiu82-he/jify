@@ -1,14 +1,20 @@
 package com.example.gigify.Screens.Screens
 
+import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddAPhoto
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -28,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.example.gigify.Navigation.ROUTE_LOGIN
 import com.example.gigify.Models.ViewModels.AuthViewModel
 import com.example.gigify.R
@@ -44,20 +51,21 @@ fun Register(
     RegisterContent(
         navController = navController,
         authState = authState,
-        onRegisterClick = { name, email, phoneNumber, location, selectedRole, password ->
+        onRegisterClick = { name, email, phoneNumber, location, selectedRole, password, imageUri ->
             if (password.length < 6) {
                 Toast.makeText(context, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show()
                 return@RegisterContent
             }
             authViewModel.registerUser(
-                name,
-                email,
-                phoneNumber,
-                location,
-                selectedRole,
-                password,
-                navController,
-                context
+                name = name,
+                email = email,
+                phone = phoneNumber,
+                location = location,
+                role = selectedRole,
+                pass = password,
+                imageUri = imageUri,
+                navController = navController,
+                context = context
             )
         }
     )
@@ -68,7 +76,7 @@ fun Register(
 fun RegisterContent(
     navController: NavController,
     authState: AuthViewModel.AuthState,
-    onRegisterClick: (String, String, String, String, String, String) -> Unit
+    onRegisterClick: (String, String, String, String, String, String, Uri?) -> Unit
 ) {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -76,8 +84,15 @@ fun RegisterContent(
     var location by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var selectedRole by remember { mutableStateOf("Client") }
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
 
     val roles = listOf("Client", "Worker")
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        imageUri = uri
+    }
 
     Box(
         modifier = Modifier
@@ -94,14 +109,38 @@ fun RegisterContent(
         ) {
             Spacer(modifier = Modifier.height(40.dp))
 
-            Image(
-                painter = painterResource(id = R.drawable.gigify_logo),
-                contentDescription = "Gigify Logo",
+            Box(
                 modifier = Modifier
                     .size(120.dp)
-                    .clip(CircleShape),
-                contentScale = ContentScale.Crop
-            )
+                    .clip(CircleShape)
+                    .background(AppSurface)
+                    .clickable { launcher.launch("image/*") },
+                contentAlignment = Alignment.Center
+            ) {
+                if (imageUri != null) {
+                    AsyncImage(
+                        model = imageUri,
+                        contentDescription = "Profile Picture",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                } else {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            imageVector = Icons.Default.AddAPhoto,
+                            contentDescription = "Add Photo",
+                            tint = AppPrimary,
+                            modifier = Modifier.size(40.dp)
+                        )
+                        Text(
+                            "Add Photo",
+                            fontSize = 12.sp,
+                            color = AppPrimary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            }
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -264,7 +303,8 @@ fun RegisterContent(
                         phoneNumber,
                         location,
                         selectedRole,
-                        password
+                        password,
+                        imageUri
                     )
                 },
                 enabled = authState !is AuthViewModel.AuthState.Loading,
@@ -310,7 +350,7 @@ fun RegisterPreview() {
         RegisterContent(
             navController = rememberNavController(),
             authState = AuthViewModel.AuthState.Idle,
-            onRegisterClick = { _, _, _, _, _, _ -> }
+            onRegisterClick = { _, _, _, _, _, _, _ -> }
         )
     }
 }

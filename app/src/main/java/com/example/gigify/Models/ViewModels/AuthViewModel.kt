@@ -61,7 +61,8 @@ class AuthViewModel : ViewModel() {
         phone: String, 
         location: String,
         role: String,
-        pass: String, 
+        pass: String,
+        imageUri: Uri?,
         navController: NavController, 
         context: Context
     ) {
@@ -77,6 +78,13 @@ class AuthViewModel : ViewModel() {
                 val result = auth.createUserWithEmailAndPassword(email, pass).await()
                 val uid = result.user?.uid ?: ""
                 
+                var profilePhotoUrl = ""
+                if (imageUri != null) {
+                    val ref = storage.reference.child("profile_pictures/$uid")
+                    ref.putFile(imageUri).await()
+                    profilePhotoUrl = ref.downloadUrl.await().toString()
+                }
+
                 val userData = User(
                     uid = uid,
                     name = name,
@@ -84,6 +92,7 @@ class AuthViewModel : ViewModel() {
                     phone = phone,
                     locationName = location,
                     role = role.lowercase(),
+                    profilePhoto = profilePhotoUrl,
                     createdAt = System.currentTimeMillis()
                 )
 

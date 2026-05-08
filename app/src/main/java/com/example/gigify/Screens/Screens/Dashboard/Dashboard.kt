@@ -214,7 +214,9 @@ fun DashboardContent(
                 Spacer(modifier = Modifier.height(12.dp))
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     DashboardItem(modifier = Modifier.weight(1f), text = "Messages", icon = Icons.Default.Email, containerColor = AppSurface, contentColor = Color.Black, onClick = { navController.navigate(ROUTE_CHAT_LIST) })
-                    DashboardItem(modifier = Modifier.weight(1f), text = "Payments", icon = Icons.Default.Payments, containerColor = AppSurface, contentColor = Color.Black, onClick = { /* Navigate to Transactions */ })
+                    if (!isWorker) {
+                        DashboardItem(modifier = Modifier.weight(1f), text = "Payments", icon = Icons.Default.Payments, containerColor = AppSurface, contentColor = Color.Black, onClick = { navController.navigate(ROUTE_PAYMENT_METHOD) })
+                    }
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
