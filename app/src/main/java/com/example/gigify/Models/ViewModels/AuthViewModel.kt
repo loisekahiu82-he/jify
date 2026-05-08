@@ -7,8 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.gigify.Models.User
-import com.example.gigify.Navigation.ROUTE_HOME
-import com.example.gigify.Navigation.ROUTE_LOGIN
+import com.example.gigify.Navigation.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -88,14 +87,25 @@ class AuthViewModel : ViewModel() {
                     createdAt = System.currentTimeMillis()
                 )
 
+                // 1. Save to Firestore
                 db.collection("Users").document(uid).set(userData).await()
 
                 withContext(Dispatchers.Main) {
+                    // 2. Manually update local state so details are visible INSTANTLY
+                    _currentUserData.value = userData
                     _authState.value = AuthState.Success
-                    Toast.makeText(context, "Account created! Please log in", Toast.LENGTH_SHORT).show()
-                    auth.signOut()
-                    navController.navigate(ROUTE_LOGIN) {
-                        popUpTo(0) { inclusive = true }
+                    
+                    Toast.makeText(context, "Welcome to Gigify, $name!", Toast.LENGTH_SHORT).show()
+                    
+                    // 3. Navigate directly to dashboard
+                    val destination = if (role.lowercase() == "worker") {
+                        ROUTE_WORKER_DASHBOARD
+                    } else {
+                        ROUTE_CLIENT_DASHBOARD
+                    }
+                    
+                    navController.navigate(destination) {
+                        popUpTo(ROUTE_REGISTER) { inclusive = true }
                     }
                 }
             } catch (e: Exception) {
@@ -117,10 +127,26 @@ class AuthViewModel : ViewModel() {
         auth.signInWithEmailAndPassword(email, pass)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    _authState.value = AuthState.Success
-                    navController.navigate(ROUTE_HOME) {
-                        popUpTo(ROUTE_HOME) { inclusive = true }
-                    }
+                    val uid = auth.currentUser?.uid ?: ""
+                    db.collection("Users").document(uid).get()
+                        .addOnSuccessListener { snapshot ->
+                            val user = snapshot.toObject(User::class.java)
+                            _currentUserData.value = user
+
+                            val destination = when (user?.role?.lowercase()) {
+                                "worker" -> ROUTE_WORKER_DASHBOARD
+                                "client" -> ROUTE_CLIENT_DASHBOARD
+                                else -> ROUTE_HOME
+                            }
+                            
+                            _authState.value = AuthState.Success
+                            navController.navigate(destination) {
+                                popUpTo(ROUTE_LOGIN) { inclusive = true }
+                            }
+                        }
+                        .addOnFailureListener {
+                            _authState.value = AuthState.Error("Failed to fetch user profile")
+                        }
                 } else {
                     _authState.value = AuthState.Error(task.exception?.message ?: "Login failed")
                     Toast.makeText(context, "Invalid credentials", Toast.LENGTH_SHORT).show()

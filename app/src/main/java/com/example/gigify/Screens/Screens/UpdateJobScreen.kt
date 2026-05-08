@@ -49,124 +49,140 @@ fun UpdateJobScreen(navController: NavController, jobId: String) {
         }
     }
 
-    val backgroundGradient = Brush.verticalGradient(
-        colors = listOf(LightPurple, White, MainPurple)
-    )
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Update Job", color = Color.Black, fontWeight = FontWeight.Bold) },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = DarkPurple)
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = White)
-            )
-        },
-        containerColor = White
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(backgroundGradient)
-                .padding(innerPadding)
-                .padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            OutlinedTextField(
-                value = title,
-                onValueChange = { title = it },
-                label = { Text("Title", color = Color.Black.copy(alpha = 0.7f)) },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MainPurple,
-                    unfocusedBorderColor = LightPurple,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    focusedLabelColor = Color.Black
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(AppGradient)
+    ) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text("Update Job", color = AppPrimary, fontWeight = FontWeight.Bold) },
+                    navigationIcon = {
+                        IconButton(onClick = { navController.navigateUp() }) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = AppPrimary)
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
                 )
-            )
-
-            OutlinedTextField(
-                value = category,
-                onValueChange = { category = it },
-                label = { Text("Category", color = Color.Black.copy(alpha = 0.7f)) },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MainPurple,
-                    unfocusedBorderColor = LightPurple,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    focusedLabelColor = Color.Black
-                )
-            )
-
-            OutlinedTextField(
-                value = description,
-                onValueChange = { description = it },
-                label = { Text("Description", color = Color.Black.copy(alpha = 0.7f)) },
-                modifier = Modifier.fillMaxWidth().height(120.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MainPurple,
-                    unfocusedBorderColor = LightPurple,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    focusedLabelColor = Color.Black
-                )
-            )
-
-            OutlinedTextField(
-                value = budget,
-                onValueChange = { if (it.all { char -> char.isDigit() || char == '.' }) budget = it },
-                label = { Text("Budget (KES)", color = Color.Black.copy(alpha = 0.7f)) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MainPurple,
-                    unfocusedBorderColor = LightPurple,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    focusedLabelColor = Color.Black
-                )
-            )
-
-            OutlinedTextField(
-                value = status,
-                onValueChange = { status = it },
-                label = { Text("Status (pending, active, completed)", color = Color.Black.copy(alpha = 0.7f)) },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MainPurple,
-                    unfocusedBorderColor = LightPurple,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    focusedLabelColor = Color.Black
-                )
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            Button(
-                onClick = {
-                    if (title.isBlank() || description.isBlank() || budget.isBlank()) {
-                        Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(context, "Job updated successfully", Toast.LENGTH_SHORT).show()
-                        navController.navigateUp()
-                    }
-                },
-                modifier = Modifier.fillMaxWidth().height(56.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = DarkPurple),
-                shape = RoundedCornerShape(12.dp)
+            },
+            containerColor = Color.Transparent
+        ) { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Text("Update Job", color = White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                OutlinedTextField(
+                    value = title,
+                    onValueChange = { title = it },
+                    label = { Text("Title", color = AppPrimary.copy(alpha = 0.7f)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = AppPrimary,
+                        unfocusedBorderColor = AppSurface,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                        focusedLabelColor = AppPrimary,
+                        unfocusedLabelColor = AppPrimary.copy(alpha = 0.6f),
+                        focusedContainerColor = AppSurface.copy(alpha = 0.9f),
+                        unfocusedContainerColor = AppSurface.copy(alpha = 0.9f)
+                    )
+                )
+
+                OutlinedTextField(
+                    value = category,
+                    onValueChange = { category = it },
+                    label = { Text("Category", color = AppPrimary.copy(alpha = 0.7f)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = AppPrimary,
+                        unfocusedBorderColor = AppSurface,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                        focusedLabelColor = AppPrimary,
+                        unfocusedLabelColor = AppPrimary.copy(alpha = 0.6f),
+                        focusedContainerColor = AppSurface.copy(alpha = 0.9f),
+                        unfocusedContainerColor = AppSurface.copy(alpha = 0.9f)
+                    )
+                )
+
+                OutlinedTextField(
+                    value = description,
+                    onValueChange = { description = it },
+                    label = { Text("Description", color = AppPrimary.copy(alpha = 0.7f)) },
+                    modifier = Modifier.fillMaxWidth().height(120.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = AppPrimary,
+                        unfocusedBorderColor = AppSurface,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                        focusedLabelColor = AppPrimary,
+                        unfocusedLabelColor = AppPrimary.copy(alpha = 0.6f),
+                        focusedContainerColor = AppSurface.copy(alpha = 0.9f),
+                        unfocusedContainerColor = AppSurface.copy(alpha = 0.9f)
+                    )
+                )
+
+                OutlinedTextField(
+                    value = budget,
+                    onValueChange = { if (it.all { char -> char.isDigit() || char == '.' }) budget = it },
+                    label = { Text("Budget (KES)", color = AppPrimary.copy(alpha = 0.7f)) },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = AppPrimary,
+                        unfocusedBorderColor = AppSurface,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                        focusedLabelColor = AppPrimary,
+                        unfocusedLabelColor = AppPrimary.copy(alpha = 0.6f),
+                        focusedContainerColor = AppSurface.copy(alpha = 0.9f),
+                        unfocusedContainerColor = AppSurface.copy(alpha = 0.9f)
+                    )
+                )
+
+                OutlinedTextField(
+                    value = status,
+                    onValueChange = { status = it },
+                    label = { Text("Status", color = AppPrimary.copy(alpha = 0.7f)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = AppPrimary,
+                        unfocusedBorderColor = AppSurface,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                        focusedLabelColor = AppPrimary,
+                        unfocusedLabelColor = AppPrimary.copy(alpha = 0.6f),
+                        focusedContainerColor = AppSurface.copy(alpha = 0.9f),
+                        unfocusedContainerColor = AppSurface.copy(alpha = 0.9f)
+                    )
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Button(
+                    onClick = {
+                        if (title.isBlank() || description.isBlank() || budget.isBlank()) {
+                            Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(context, "Job updated successfully", Toast.LENGTH_SHORT).show()
+                            navController.navigateUp()
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth().height(56.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = AppPrimary),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text("Update Job", color = AppBackground, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                }
             }
         }
     }

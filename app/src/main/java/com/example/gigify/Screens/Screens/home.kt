@@ -1,7 +1,9 @@
 package com.example.gigify.Screens.Screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -53,9 +55,7 @@ import com.example.gigify.ui.components.CategoryChip
 import com.example.gigify.ui.components.InfoBanner
 import com.example.gigify.ui.components.WorkerCard
 import com.example.gigify.ui.components.WorkerDisplay
-import com.example.gigify.ui.theme.MainPurple
-import com.example.gigify.ui.theme.LightPurple
-import com.example.gigify.ui.theme.White
+import com.example.gigify.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,10 +84,14 @@ fun Home(
         catMatch && searchMatch
     }
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            Surface(shadowElevation = 2.dp) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(AppGradient)
+    ) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
                 TopAppBar(
                     title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -102,100 +106,104 @@ fun Home(
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
                                 text = "Gigify",
-                                color = MainPurple,
+                                color = AppPrimary,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 20.sp
                             )
                         }
                     },
-                    colors = TopAppBarDefaults.topAppBarColors(containerColor = White)
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
                 )
-            }
-        },
-        containerColor = White,
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { navController.navigate(ROUTE_POST_JOB) },
-                containerColor = MainPurple,
-                contentColor = White
-            ) {
-                Text("+", fontSize = 24.sp)
-            }
-        }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .padding(horizontal = 16.dp)
-        ) {
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            Text(
-                text = "Habari, $firstName",
-                color = MainPurple,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = "Find trusted workers near you",
-                color = MainPurple.copy(alpha = 0.6f),
-                fontSize = 14.sp
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-            
-            OutlinedTextField(
-                value = search,
-                onValueChange = { search = it },
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("Search e.g. plumber, cleaner...", color = MainPurple.copy(alpha = 0.4f)) },
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = MainPurple) },
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedBorderColor = LightPurple,
-                    focusedBorderColor = MainPurple,
-                    focusedTextColor = MainPurple,
-                    unfocusedTextColor = MainPurple
-                ),
-                shape = RoundedCornerShape(12.dp),
-                singleLine = true
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Text("Categories", color = MainPurple, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            Spacer(modifier = Modifier.height(8.dp))
-
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                items(categories) { c ->
-                    CategoryChip(
-                        label = c,
-                        isSelected = category == c,
-                        onClick = { category = c }
-                    )
+            },
+            containerColor = Color.Transparent,
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = { navController.navigate(ROUTE_POST_JOB) },
+                    containerColor = AppPrimary,
+                    contentColor = AppBackground
+                ) {
+                    Text("+", fontSize = 24.sp, color = AppBackground)
                 }
             }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Text(
-                if (filteredList.isEmpty()) "No workers found" else "Available near you", 
-                color = MainPurple,
-                fontWeight = FontWeight.Bold, 
-                fontSize = 16.sp
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                contentPadding = PaddingValues(bottom = 80.dp)
+        ) { padding ->
+            Column(
+                modifier = Modifier
+                    .padding(padding)
+                    .padding(horizontal = 16.dp)
             ) {
-                items(filteredList) { w ->
-                    WorkerCard(w, navController)
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                Text(
+                    text = "Habari, $firstName",
+                    color = AppPrimary,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "Find trusted workers near you",
+                    color = AppPrimary.copy(alpha = 0.6f),
+                    fontSize = 14.sp
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+                
+                OutlinedTextField(
+                    value = search,
+                    onValueChange = { search = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    placeholder = { Text("Search e.g. plumber, cleaner...", color = Color.Black.copy(alpha = 0.4f)) },
+                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = Color.Black.copy(alpha = 0.6f)) },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = AppPrimary,
+                        unfocusedBorderColor = AppSurface,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                        focusedLabelColor = AppPrimary,
+                        unfocusedLabelColor = AppPrimary.copy(alpha = 0.6f),
+                        focusedContainerColor = AppSurface.copy(alpha = 0.9f),
+                        unfocusedContainerColor = AppSurface.copy(alpha = 0.9f)
+                    ),
+                    shape = RoundedCornerShape(12.dp),
+                    singleLine = true
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Text("Categories", color = AppPrimary, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Spacer(modifier = Modifier.height(8.dp))
+
+                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    items(categories) { c ->
+                        CategoryChip(
+                            label = c,
+                            isSelected = category == c,
+                            onClick = { category = c }
+                        )
+                    }
                 }
-                item {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    InfoBanner()
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Text(
+                    if (filteredList.isEmpty()) "No workers found" else "Available near you", 
+                    color = AppPrimary,
+                    fontWeight = FontWeight.Bold, 
+                    fontSize = 16.sp
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(bottom = 80.dp)
+                ) {
+                    items(filteredList) { w ->
+                        WorkerCard(w, navController)
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        InfoBanner()
+                    }
                 }
             }
         }

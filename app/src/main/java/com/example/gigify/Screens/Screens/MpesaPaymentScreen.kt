@@ -37,128 +37,130 @@ fun MpesaPaymentScreen(navController: NavController, jobId: String, amount: Stri
     var phoneNumber by remember { mutableStateOf("") }
     val paymentStatus by viewModel.paymentStatus.collectAsState()
 
-    val backgroundGradient = Brush.verticalGradient(
-        colors = listOf(LightPurple, White, MainPurple)
-    )
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("M-Pesa Payment", color = MainPurple, fontWeight = FontWeight.Bold) },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = MainPurple)
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = White)
-            )
-        },
-        containerColor = White
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .background(backgroundGradient)
-                .padding(24.dp)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "Amount to Pay",
-                fontSize = 14.sp,
-                color = MainPurple.copy(alpha = 0.7f)
-            )
-            Text(
-                text = "KES $amount",
-                fontSize = 32.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = MainPurple
-            )
-            
-            Spacer(modifier = Modifier.height(32.dp))
-            
-            Card(
-                colors = CardDefaults.cardColors(containerColor = White.copy(alpha = 0.9f)),
-                shape = RoundedCornerShape(16.dp),
-                modifier = Modifier.fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-            ) {
-                Column(modifier = Modifier.padding(20.dp)) {
-                    Text(
-                        text = "Payment via STK Push",
-                        fontWeight = FontWeight.Bold,
-                        color = MainPurple,
-                        fontSize = 16.sp,
-                        modifier = Modifier.padding(bottom = 8.dp)
-                    )
-                    Text(
-                        text = "Enter your phone number below. You will receive a prompt on your phone to enter your M-Pesa PIN.",
-                        fontSize = 13.sp,
-                        color = MainPurple.copy(alpha = 0.8f),
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
-                    
-                    OutlinedTextField(
-                        value = phoneNumber,
-                        onValueChange = { phoneNumber = it },
-                        label = { Text("M-Pesa Number") },
-                        placeholder = { Text("2547XXXXXXXX") },
-                        modifier = Modifier.fillMaxWidth(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                        shape = RoundedCornerShape(12.dp),
-                        singleLine = true,
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = MainPurple,
-                            unfocusedBorderColor = LightPurple,
-                            focusedTextColor = MainPurple,
-                            unfocusedTextColor = MainPurple,
-                            focusedLabelColor = MainPurple
-                        )
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(40.dp))
-
-            Button(
-                onClick = { 
-                    if (phoneNumber.isNotEmpty()) {
-                        viewModel.initiateSTKPush(phoneNumber, amount.split(".")[0].toInt())
-                    } else {
-                        Toast.makeText(context, "Please enter your M-Pesa number", Toast.LENGTH_SHORT).show()
-                    }
-                },
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(AppGradient)
+    ) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text("M-Pesa Payment", color = AppPrimary, fontWeight = FontWeight.Bold) },
+                    navigationIcon = {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = AppPrimary)
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+                )
+            },
+            containerColor = Color.Transparent
+        ) { paddingValues ->
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MainPurple),
-                shape = RoundedCornerShape(12.dp)
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(24.dp)
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Request Payment",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = White
+                    text = "Amount to Pay",
+                    fontSize = 14.sp,
+                    color = AppPrimary.copy(alpha = 0.7f)
                 )
-            }
-
-            paymentStatus?.let { status ->
-                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = "KES $amount",
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = AppPrimary
+                )
+                
+                Spacer(modifier = Modifier.height(32.dp))
+                
                 Card(
-                    colors = CardDefaults.cardColors(
-                        containerColor = LightPurple.copy(alpha = 0.5f)
-                    ),
-                    modifier = Modifier.fillMaxWidth()
+                    colors = CardDefaults.cardColors(containerColor = AppSurface.copy(alpha = 0.9f)),
+                    shape = RoundedCornerShape(16.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                ) {
+                    Column(modifier = Modifier.padding(20.dp)) {
+                        Text(
+                            text = "Payment via STK Push",
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black,
+                            fontSize = 16.sp,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                        Text(
+                            text = "Enter your phone number below. You will receive a prompt on your phone to enter your M-Pesa PIN.",
+                            fontSize = 13.sp,
+                            color = Color.Black.copy(alpha = 0.8f),
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
+                        
+                        OutlinedTextField(
+                            value = phoneNumber,
+                            onValueChange = { phoneNumber = it },
+                            label = { Text("M-Pesa Number") },
+                            placeholder = { Text("2547XXXXXXXX") },
+                            modifier = Modifier.fillMaxWidth(),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                            shape = RoundedCornerShape(12.dp),
+                            singleLine = true,
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = AppPrimary,
+                                unfocusedBorderColor = AppBackground,
+                                focusedTextColor = Color.Black,
+                                unfocusedTextColor = Color.Black,
+                                focusedLabelColor = AppPrimary,
+                                unfocusedLabelColor = Color.Black.copy(alpha = 0.6f)
+                            )
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(40.dp))
+
+                Button(
+                    onClick = { 
+                        if (phoneNumber.isNotEmpty()) {
+                            viewModel.initiateSTKPush(phoneNumber, amount.split(".")[0].toInt())
+                        } else {
+                            Toast.makeText(context, "Please enter your M-Pesa number", Toast.LENGTH_SHORT).show()
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = AppPrimary),
+                    shape = RoundedCornerShape(12.dp)
                 ) {
                     Text(
-                        text = status,
-                        modifier = Modifier.padding(16.dp),
-                        color = MainPurple,
-                        fontWeight = FontWeight.Medium,
-                        textAlign = TextAlign.Center,
-                        fontSize = 14.sp
+                        text = "Request Payment",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = AppBackground
                     )
+                }
+
+                paymentStatus?.let { status ->
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = AppSurface.copy(alpha = 0.5f)
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = status,
+                            modifier = Modifier.padding(16.dp),
+                            color = AppPrimary,
+                            fontWeight = FontWeight.Medium,
+                            textAlign = TextAlign.Center,
+                            fontSize = 14.sp
+                        )
+                    }
                 }
             }
         }

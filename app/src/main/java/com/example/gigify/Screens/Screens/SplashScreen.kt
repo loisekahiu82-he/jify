@@ -16,12 +16,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.gigify.Navigation.ROUTE_HOME
-import com.example.gigify.Navigation.ROUTE_REGISTER
-import com.example.gigify.Navigation.ROUTE_SPLASH
+import com.example.gigify.Navigation.*
 import com.example.gigify.R
 import com.example.gigify.ui.theme.*
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.delay
 
 @Composable
@@ -33,10 +32,33 @@ fun SplashScreen(navController: NavController) {
     LaunchedEffect(Unit) {
         delay(2000) 
         val currentUser = FirebaseAuth.getInstance().currentUser
-        val destination = if (currentUser != null) ROUTE_HOME else ROUTE_REGISTER
         
-        navController.navigate(destination) {
-            popUpTo(ROUTE_SPLASH) { inclusive = true }
+        if (currentUser != null) {
+            // Check user role to navigate to the correct dashboard
+            FirebaseFirestore.getInstance().collection("Users")
+                .document(currentUser.uid)
+                .get()
+                .addOnSuccessListener { document ->
+                    val role = document.getString("role")?.lowercase()
+                    val destination = when (role) {
+                        "worker" -> ROUTE_WORKER_DASHBOARD
+                        "client" -> ROUTE_CLIENT_DASHBOARD
+                        else -> ROUTE_HOME
+                    }
+                    navController.navigate(destination) {
+                        popUpTo(ROUTE_SPLASH) { inclusive = true }
+                    }
+                }
+                .addOnFailureListener {
+                    // If fetching role fails, fallback to login
+                    navController.navigate(ROUTE_LOGIN) {
+                        popUpTo(ROUTE_SPLASH) { inclusive = true }
+                    }
+                }
+        } else {
+            navController.navigate(ROUTE_REGISTER) {
+                popUpTo(ROUTE_SPLASH) { inclusive = true }
+            }
         }
     }
 

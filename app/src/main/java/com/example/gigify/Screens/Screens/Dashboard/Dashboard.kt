@@ -40,18 +40,20 @@ fun ClientDashboardScreen(navController: NavController) {
     val dashboardVm: DashboardViewModel = viewModel()
     val stats by dashboardVm.clientStats.collectAsState()
     val currentUser by authViewModel.currentUserData.collectAsState()
-    val userName = currentUser?.name?.split(" ")?.firstOrNull() ?: "User"
+    val fullName = currentUser?.name ?: "User"
+    val firstName = fullName.split(" ").firstOrNull() ?: "User"
 
     LaunchedEffect(Unit) {
         dashboardVm.fetchClientStats()
     }
 
     DashboardContent(
-        title = "Client Dashboard",
-        userName = userName,
+        title = if (fullName != "User") "$fullName's Dashboard" else "Client Dashboard",
+        userName = firstName,
         navController = navController,
         statsValue = "KES ${stats.totalSpent}",
         statsLabel = "Total Spent",
+        isWorker = false,
         onLogout = { authViewModel.logout(navController) }
     )
 }
@@ -62,18 +64,20 @@ fun WorkerDashboardScreen(navController: NavController) {
     val dashboardVm: DashboardViewModel = viewModel()
     val stats by dashboardVm.workerStats.collectAsState()
     val currentUser by authViewModel.currentUserData.collectAsState()
-    val userName = currentUser?.name?.split(" ")?.firstOrNull() ?: "User"
+    val fullName = currentUser?.name ?: "User"
+    val firstName = fullName.split(" ").firstOrNull() ?: "User"
 
     LaunchedEffect(Unit) {
         dashboardVm.fetchWorkerStats()
     }
 
     DashboardContent(
-        title = "Worker Dashboard",
-        userName = userName,
+        title = if (fullName != "User") "$fullName's Dashboard" else "Worker Dashboard",
+        userName = firstName,
         navController = navController,
         statsValue = "KES ${stats.totalEarnings}",
         statsLabel = "Total Earnings",
+        isWorker = true,
         onLogout = { authViewModel.logout(navController) }
     )
 }
@@ -86,6 +90,7 @@ fun DashboardContent(
     navController: NavController,
     statsValue: String,
     statsLabel: String,
+    isWorker: Boolean,
     onLogout: () -> Unit
 ) {
     var selectedItem by remember { mutableIntStateOf(1) }
@@ -98,16 +103,10 @@ fun DashboardContent(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(text = title, fontWeight = FontWeight.Bold, fontSize = 18.sp, color = AppPrimary) },
+                    title = { Text(text = title, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = AppPrimary) },
                     actions = {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.clickable { onLogout() }.padding(end = 8.dp)
-                        ) {
-                            Text(text = "Logout", color = AppPrimary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                            IconButton(onClick = onLogout) {
-                                Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "Logout", tint = AppPrimary, modifier = Modifier.size(20.dp))
-                            }
+                        IconButton(onClick = onLogout) {
+                            Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "Logout", tint = AppPrimary)
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
@@ -179,8 +178,8 @@ fun DashboardContent(
                     contentScale = ContentScale.Crop
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "Habari, $userName", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = AppPrimary)
-                Text(text = "Account Overview", fontSize = 14.sp, color = AppPrimary.copy(alpha = 0.6f), modifier = Modifier.padding(bottom = 12.dp))
+                Text(text = "Habari, $userName!", fontSize = 24.sp, fontWeight = FontWeight.ExtraBold, color = AppPrimary)
+                Text(text = "Here is your account overview", fontSize = 14.sp, color = AppPrimary.copy(alpha = 0.6f), modifier = Modifier.padding(bottom = 12.dp))
 
                 Card(
                     modifier = Modifier.fillMaxWidth(),
@@ -189,11 +188,11 @@ fun DashboardContent(
                     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                 ) {
                     Column(modifier = Modifier.padding(20.dp)) {
-                        Text(text = statsLabel, color = AppBackground.copy(alpha = 0.8f), fontSize = 12.sp)
-                        Text(text = statsValue, fontSize = 28.sp, fontWeight = FontWeight.Bold, color = AppBackground)
+                        Text(text = statsLabel, color = Color.Black.copy(alpha = 0.7f), fontSize = 12.sp)
+                        Text(text = statsValue, fontSize = 28.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                         Spacer(modifier = Modifier.height(8.dp))
-                        Surface(color = AppBackground.copy(alpha = 0.2f), shape = RoundedCornerShape(8.dp)) {
-                            Text(text = "Status: Active", color = AppBackground, fontSize = 11.sp, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
+                        Surface(color = Color.Black.copy(alpha = 0.1f), shape = RoundedCornerShape(8.dp)) {
+                            Text(text = "Status: Active", color = Color.Black, fontSize = 11.sp, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
                         }
                     }
                 }
@@ -205,18 +204,22 @@ fun DashboardContent(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    DashboardItem(modifier = Modifier.weight(1f), text = "Post Job", icon = Icons.Default.Add, containerColor = AppSurface, contentColor = AppBackground, onClick = { navController.navigate(ROUTE_POST_JOB) })
-                    DashboardItem(modifier = Modifier.weight(1f), text = "My Gigs", icon = Icons.AutoMirrored.Filled.List, containerColor = AppSurface, contentColor = AppBackground, onClick = { navController.navigate(ROUTE_MY_JOBS) })
+                    if (isWorker) {
+                        DashboardItem(modifier = Modifier.weight(1f), text = "Find Gigs", icon = Icons.Default.Search, containerColor = AppSurface, contentColor = Color.Black, onClick = { navController.navigate(ROUTE_HOME) })
+                    } else {
+                        DashboardItem(modifier = Modifier.weight(1f), text = "Post Job", icon = Icons.Default.Add, containerColor = AppSurface, contentColor = Color.Black, onClick = { navController.navigate(ROUTE_POST_JOB) })
+                    }
+                    DashboardItem(modifier = Modifier.weight(1f), text = "My Gigs", icon = Icons.AutoMirrored.Filled.List, containerColor = AppSurface, contentColor = Color.Black, onClick = { navController.navigate(ROUTE_MY_JOBS) })
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    DashboardItem(modifier = Modifier.weight(1f), text = "Messages", icon = Icons.Default.Email, containerColor = AppSurface, contentColor = AppBackground, onClick = { navController.navigate(ROUTE_CHAT) })
-                    DashboardItem(modifier = Modifier.weight(1f), text = "Payments", icon = Icons.Default.Payments, containerColor = AppSurface, contentColor = AppBackground, onClick = { navController.navigate(ROUTE_PAYMENT) })
+                    DashboardItem(modifier = Modifier.weight(1f), text = "Messages", icon = Icons.Default.Email, containerColor = AppSurface, contentColor = Color.Black, onClick = { /* Navigate to Chat List */ })
+                    DashboardItem(modifier = Modifier.weight(1f), text = "Payments", icon = Icons.Default.Payments, containerColor = AppSurface, contentColor = Color.Black, onClick = { /* Navigate to Transactions */ })
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    DashboardItem(modifier = Modifier.weight(1f), text = "Profile", icon = Icons.Default.Person, containerColor = AppSurface, contentColor = AppBackground, onClick = { navController.navigate(ROUTE_EDIT_PROFILE) })
-                    DashboardItem(modifier = Modifier.weight(1f), text = "Settings", icon = Icons.Default.Settings, containerColor = AppSurface, contentColor = AppBackground, onClick = { navController.navigate(ROUTE_EDIT_PROFILE) })
+                    DashboardItem(modifier = Modifier.weight(1f), text = "Profile", icon = Icons.Default.Person, containerColor = AppSurface, contentColor = Color.Black, onClick = { navController.navigate(ROUTE_EDIT_PROFILE) })
+                    DashboardItem(modifier = Modifier.weight(1f), text = "Settings", icon = Icons.Default.Settings, containerColor = AppSurface, contentColor = Color.Black, onClick = { navController.navigate(ROUTE_EDIT_PROFILE) })
                 }
                 Spacer(modifier = Modifier.height(24.dp))
             }
@@ -251,6 +254,14 @@ fun DashboardItem(
 @Composable
 fun DashboardPreview() {
     GigifyTheme {
-        DashboardContent(title = "Client Dashboard", userName = "James", navController = rememberNavController(), statsValue = "KES 1000", statsLabel = "Total Spent", onLogout = {})
+        DashboardContent(
+            title = "James's Dashboard",
+            navController = rememberNavController(),
+            userName = "James",
+            statsValue = "KES 1000",
+            statsLabel = "Total Spent",
+            isWorker = false,
+            onLogout = {}
+        )
     }
 }

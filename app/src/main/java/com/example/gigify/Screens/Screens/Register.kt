@@ -79,216 +79,227 @@ fun RegisterContent(
 
     val roles = listOf("Client", "Worker")
 
-    val backgroundGradient = Brush.verticalGradient(
-        colors = listOf(LightPurple, White, MainPurple)
-    )
-
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(backgroundGradient)
-            .padding(24.dp)
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+            .background(AppGradient)
     ) {
-        Spacer(modifier = Modifier.height(40.dp))
-
-        Image(
-            painter = painterResource(id = R.drawable.gigify_logo),
-            contentDescription = "Gigify Logo",
+        Column(
             modifier = Modifier
-                .size(120.dp)
-                .clip(CircleShape),
-            contentScale = ContentScale.Crop
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Text(
-            text = "Create Account",
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold,
-            color = MainPurple
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Join Gigify to find trusted workers",
-            color = MainPurple.copy(alpha = 0.7f),
-            fontSize = 14.sp
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-        
-        OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
-            label = { Text("Full Name") },
-            placeholder = { Text("John Doe") },
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MainPurple,
-                unfocusedBorderColor = LightPurple,
-                focusedTextColor = MainPurple,
-                unfocusedTextColor = MainPurple,
-                focusedLabelColor = MainPurple,
-                unfocusedLabelColor = MainPurple.copy(alpha = 0.6f)
-            )
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Email Address") },
-            placeholder = { Text("example@mail.com") },
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            shape = RoundedCornerShape(12.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MainPurple,
-                unfocusedBorderColor = LightPurple,
-                focusedTextColor = MainPurple,
-                unfocusedTextColor = MainPurple,
-                focusedLabelColor = MainPurple,
-                unfocusedLabelColor = MainPurple.copy(alpha = 0.6f)
-            )
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-        OutlinedTextField(
-            value = phoneNumber,
-            onValueChange = { phoneNumber = it },
-            label = { Text("Phone Number") },
-            placeholder = { Text("+254...") },
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-            shape = RoundedCornerShape(12.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MainPurple,
-                unfocusedBorderColor = LightPurple,
-                focusedTextColor = MainPurple,
-                unfocusedTextColor = MainPurple,
-                focusedLabelColor = MainPurple,
-                unfocusedLabelColor = MainPurple.copy(alpha = 0.6f)
-            )
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-        OutlinedTextField(
-            value = location,
-            onValueChange = { location = it },
-            label = { Text("Location") },
-            placeholder = { Text("e.g. Westlands, Nairobi") },
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MainPurple,
-                unfocusedBorderColor = LightPurple,
-                focusedTextColor = MainPurple,
-                unfocusedTextColor = MainPurple,
-                focusedLabelColor = MainPurple,
-                unfocusedLabelColor = MainPurple.copy(alpha = 0.6f)
-            )
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-        
-        Text(
-            text = "Register as a:",
-            color = MainPurple,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 14.sp,
-            modifier = Modifier.align(Alignment.Start).padding(bottom = 8.dp)
-        )
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                .fillMaxSize()
+                .padding(24.dp)
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
         ) {
-            roles.forEach { role ->
-                FilterChip(
-                    selected = selectedRole == role,
-                    onClick = { selectedRole = role },
-                    label = { Text(role, modifier = Modifier.padding(8.dp)) },
-                    modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = MainPurple,
-                        selectedLabelColor = White,
-                        labelColor = MainPurple
-                    )
-                )
-            }
-        }
+            Spacer(modifier = Modifier.height(40.dp))
 
-        Spacer(modifier = Modifier.height(16.dp))
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Password") },
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            shape = RoundedCornerShape(12.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MainPurple,
-                unfocusedBorderColor = LightPurple,
-                focusedTextColor = MainPurple,
-                unfocusedTextColor = MainPurple,
-                focusedLabelColor = MainPurple,
-                unfocusedLabelColor = MainPurple.copy(alpha = 0.6f)
+            Image(
+                painter = painterResource(id = R.drawable.gigify_logo),
+                contentDescription = "Gigify Logo",
+                modifier = Modifier
+                    .size(120.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
             )
-        )
 
-        Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-        Button(
-            onClick = {
-                onRegisterClick(
-                    name,
-                    email,
-                    phoneNumber,
-                    location,
-                    selectedRole,
-                    password
+            Text(
+                text = "Create Account",
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "Join Gigify to find trusted workers",
+                color = Color.Black.copy(alpha = 0.7f),
+                fontSize = 14.sp
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+            
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                label = { Text("Full Name") },
+                placeholder = { Text("John Doe") },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = AppPrimary,
+                    unfocusedBorderColor = AppSurface,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    focusedLabelColor = Color.Black,
+                    unfocusedLabelColor = Color.Black.copy(alpha = 0.6f),
+                    focusedContainerColor = AppSurface.copy(alpha = 0.9f),
+                    unfocusedContainerColor = AppSurface.copy(alpha = 0.9f)
                 )
-            },
-            enabled = authState !is AuthViewModel.AuthState.Loading,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MainPurple),
-            shape = RoundedCornerShape(12.dp)
-        ) {
-            if (authState is AuthViewModel.AuthState.Loading) {
-                CircularProgressIndicator(color = White, modifier = Modifier.size(24.dp))
-            } else {
-                Text(
-                    text = "Register",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = White
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("Email Address") },
+                placeholder = { Text("example@mail.com") },
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                shape = RoundedCornerShape(12.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = AppPrimary,
+                    unfocusedBorderColor = AppSurface,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    focusedLabelColor = Color.Black,
+                    unfocusedLabelColor = Color.Black.copy(alpha = 0.6f),
+                    focusedContainerColor = AppSurface.copy(alpha = 0.9f),
+                    unfocusedContainerColor = AppSurface.copy(alpha = 0.9f)
                 )
-            }
-        }
+            )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(
+                value = phoneNumber,
+                onValueChange = { phoneNumber = it },
+                label = { Text("Phone Number") },
+                placeholder = { Text("+254...") },
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                shape = RoundedCornerShape(12.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = AppPrimary,
+                    unfocusedBorderColor = AppSurface,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    focusedLabelColor = Color.Black,
+                    unfocusedLabelColor = Color.Black.copy(alpha = 0.6f),
+                    focusedContainerColor = AppSurface.copy(alpha = 0.9f),
+                    unfocusedContainerColor = AppSurface.copy(alpha = 0.9f)
+                )
+            )
 
-        Row {
-            Text(text = "Already have an account? ", color = MainPurple.copy(alpha = 0.7f))
-            TextButton(
-                onClick = { navController.navigate(ROUTE_LOGIN) },
-                contentPadding = PaddingValues(0.dp)
+            Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(
+                value = location,
+                onValueChange = { location = it },
+                label = { Text("Location") },
+                placeholder = { Text("e.g. Westlands, Nairobi") },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = AppPrimary,
+                    unfocusedBorderColor = AppSurface,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    focusedLabelColor = Color.Black,
+                    unfocusedLabelColor = Color.Black.copy(alpha = 0.6f),
+                    focusedContainerColor = AppSurface.copy(alpha = 0.9f),
+                    unfocusedContainerColor = AppSurface.copy(alpha = 0.9f)
+                )
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            Text(
+                text = "Register as a:",
+                color = Color.Black,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 14.sp,
+                modifier = Modifier.align(Alignment.Start).padding(bottom = 8.dp)
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Text("Login", color = MainPurple, fontWeight = FontWeight.Bold)
+                roles.forEach { role ->
+                    FilterChip(
+                        selected = selectedRole == role,
+                        onClick = { selectedRole = role },
+                        label = { Text(role, modifier = Modifier.padding(8.dp)) },
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = AppPrimary,
+                            selectedLabelColor = AppBackground,
+                            labelColor = Color.Black
+                        )
+                    )
+                }
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("Password") },
+                visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                shape = RoundedCornerShape(12.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = AppPrimary,
+                    unfocusedBorderColor = AppSurface,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    focusedLabelColor = Color.Black,
+                    unfocusedLabelColor = Color.Black.copy(alpha = 0.6f),
+                    focusedContainerColor = AppSurface.copy(alpha = 0.9f),
+                    unfocusedContainerColor = AppSurface.copy(alpha = 0.9f)
+                )
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Button(
+                onClick = {
+                    onRegisterClick(
+                        name,
+                        email,
+                        phoneNumber,
+                        location,
+                        selectedRole,
+                        password
+                    )
+                },
+                enabled = authState !is AuthViewModel.AuthState.Loading,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = AppPrimary),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                if (authState is AuthViewModel.AuthState.Loading) {
+                    CircularProgressIndicator(color = AppBackground, modifier = Modifier.size(24.dp))
+                } else {
+                    Text(
+                        text = "Register",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = AppBackground
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row {
+                Text(text = "Already have an account? ", color = Color.Black.copy(alpha = 0.7f))
+                TextButton(
+                    onClick = { navController.navigate(ROUTE_LOGIN) },
+                    contentPadding = PaddingValues(0.dp)
+                ) {
+                    Text("Login", color = Color.Black, fontWeight = FontWeight.Bold)
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(24.dp))
         }
-        
-        Spacer(modifier = Modifier.height(24.dp))
     }
 }
 

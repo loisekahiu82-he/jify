@@ -30,6 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.gigify.Models.Job
+import com.example.gigify.Models.ViewModels.AuthViewModel
 import com.example.gigify.Models.ViewModels.JobViewModel
 import com.example.gigify.Navigation.ROUTE_JOB_DETAIL
 import com.example.gigify.Navigation.ROUTE_PAYMENT
@@ -40,7 +41,9 @@ import com.example.gigify.ui.theme.*
 @Composable
 fun MyJobsScreen(navController: NavController) {
     val jobViewModel: JobViewModel = viewModel()
+    val authViewModel: AuthViewModel = viewModel()
     val jobs by jobViewModel.jobs.collectAsState()
+    val userData by authViewModel.currentUserData.collectAsState()
     val context = LocalContext.current
 
     Scaffold(
@@ -55,7 +58,11 @@ fun MyJobsScreen(navController: NavController) {
                             contentScale = ContentScale.Crop
                         )
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("My Job Requests", color = Color.Black, fontWeight = FontWeight.Bold)
+                        Text(
+                            text = if (userData?.name?.isNotEmpty() == true) "${userData?.name}'s Requests" else "My Job Requests",
+                            color = Color.Black, 
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 },
                 navigationIcon = {
@@ -68,32 +75,50 @@ fun MyJobsScreen(navController: NavController) {
         },
         containerColor = White
     ) { paddingValues ->
-        if (jobs.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(text = "No job requests found", color = Color.Gray, fontSize = 16.sp)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(horizontal = 16.dp)
+        ) {
+            userData?.let {
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Hello, ${it.name}!",
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = DarkPurple
+                )
+                Text(
+                    text = "Manage your job requests here.",
+                    fontSize = 14.sp,
+                    color = Color.Gray
+                )
+                Spacer(modifier = Modifier.height(8.dp))
             }
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .padding(horizontal = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                contentPadding = PaddingValues(vertical = 16.dp)
-            ) {
-                items(jobs) { job ->
-                    JobItem(
-                        job = job,
-                        navController = navController,
-                        onClick = { navController.navigate("${ROUTE_JOB_DETAIL}/${job.jobId}") },
-                        onDelete = { jobViewModel.deleteJob(job.jobId, context) },
-                        onCancel = { jobViewModel.cancelJob(job.jobId, context) }
-                    )
+
+            if (jobs.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = "No job requests found", color = Color.Gray, fontSize = 16.sp)
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(vertical = 16.dp)
+                ) {
+                    items(jobs) { job ->
+                        JobItem(
+                            job = job,
+                            navController = navController,
+                            onClick = { navController.navigate("${ROUTE_JOB_DETAIL}/${job.jobId}") },
+                            onDelete = { jobViewModel.deleteJob(job.jobId, context) },
+                            onCancel = { jobViewModel.cancelJob(job.jobId, context) }
+                        )
+                    }
                 }
             }
         }

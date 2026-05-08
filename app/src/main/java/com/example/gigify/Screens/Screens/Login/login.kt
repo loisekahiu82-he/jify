@@ -1,4 +1,4 @@
-package com.example.gigify.Screens.Screens.Login
+package com.example.gigify.Screens.Screens.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -11,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -83,14 +82,14 @@ fun LoginContent(
                 text = "Welcome Back",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                color = AppPrimary
+                color = Color.Black
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 text = "Enter your details to login",
-                color = AppPrimary.copy(alpha = 0.7f),
+                color = Color.Black.copy(alpha = 0.7f),
                 fontSize = 14.sp
             )
 
@@ -110,7 +109,7 @@ fun LoginContent(
                     focusedTextColor = Color.Black,
                     unfocusedTextColor = Color.Black,
                     focusedLabelColor = AppPrimary,
-                    unfocusedLabelColor = AppPrimary.copy(alpha = 0.6f),
+                    unfocusedLabelColor = Color.Black.copy(alpha = 0.6f),
                     focusedContainerColor = AppSurface.copy(alpha = 0.9f),
                     unfocusedContainerColor = AppSurface.copy(alpha = 0.9f)
                 )
@@ -132,7 +131,7 @@ fun LoginContent(
                     focusedTextColor = Color.Black,
                     unfocusedTextColor = Color.Black,
                     focusedLabelColor = AppPrimary,
-                    unfocusedLabelColor = AppPrimary.copy(alpha = 0.6f),
+                    unfocusedLabelColor = Color.Black.copy(alpha = 0.6f),
                     focusedContainerColor = AppSurface.copy(alpha = 0.9f),
                     unfocusedContainerColor = AppSurface.copy(alpha = 0.9f)
                 )
@@ -166,21 +165,21 @@ fun LoginContent(
             Spacer(modifier = Modifier.height(16.dp))
 
             Row {
-                Text(text = "Don't have an account? ", color = AppPrimary.copy(alpha = 0.7f))
+                Text(text = "Don't have an account? ", color = Color.Black.copy(alpha = 0.7f))
                 TextButton(
                     onClick = { navController.navigate(ROUTE_REGISTER) },
                     contentPadding = PaddingValues(0.dp)
                 ) {
-                    Text("Register", color = AppPrimary, fontWeight = FontWeight.Bold)
+                    Text("Register", color = Color.Black, fontWeight = FontWeight.Bold)
                 }
             }
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun LoginPreview() {
+fun LoginScreenPreview() {
     GigifyTheme {
         LoginContent(
             navController = rememberNavController(),

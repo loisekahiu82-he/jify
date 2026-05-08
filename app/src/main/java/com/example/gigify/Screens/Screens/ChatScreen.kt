@@ -99,101 +99,107 @@ fun ChatContent(
     onSendClick: () -> Unit,
     listState: androidx.compose.foundation.lazy.LazyListState = rememberLazyListState()
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Box(
-                            modifier = Modifier
-                                .size(40.dp)
-                                .clip(CircleShape)
-                                .background(MainPurple),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = otherUserName.take(1).uppercase(),
-                                color = White,
-                                fontWeight = FontWeight.Bold
-                            )
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(AppGradient)
+    ) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Box(
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .clip(CircleShape)
+                                    .background(AppPrimary),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = otherUserName.take(1).uppercase(),
+                                    color = AppBackground,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Column {
+                                Text(otherUserName, color = AppPrimary, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                                Text("Active now", color = AppPrimary.copy(alpha = 0.7f), fontSize = 11.sp)
+                            }
                         }
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Column {
-                            Text(otherUserName, color = MainPurple, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                            Text("Active now", color = MainPurple.copy(alpha = 0.7f), fontSize = 11.sp)
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = onBackClick) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = AppPrimary)
                         }
-                    }
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = MainPurple)
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = White)
-            )
-        },
-        bottomBar = {
-            Surface(shadowElevation = 4.dp, color = White) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 8.dp)
-                        .navigationBarsPadding(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    TextField(
-                        value = messageText,
-                        onValueChange = onMessageChange,
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+                )
+            },
+            bottomBar = {
+                Surface(color = Color.Transparent) {
+                    Row(
                         modifier = Modifier
-                            .weight(1f)
-                            .clip(RoundedCornerShape(24.dp)),
-                        placeholder = { Text("Type a message...", color = MainPurple.copy(alpha = 0.5f)) },
-                        colors = TextFieldDefaults.colors(
-                            focusedContainerColor = LightPurple.copy(alpha = 0.2f),
-                            unfocusedContainerColor = LightPurple.copy(alpha = 0.2f),
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            focusedTextColor = MainPurple,
-                            unfocusedTextColor = MainPurple
-                        ),
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
-                        keyboardActions = KeyboardActions(onSend = { onSendClick() })
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    IconButton(
-                        onClick = onSendClick,
-                        enabled = messageText.isNotBlank() && !isSending,
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .background(if (messageText.isNotBlank()) MainPurple else LightPurple)
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 8.dp)
+                            .navigationBarsPadding(),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        if (isSending) {
-                            CircularProgressIndicator(modifier = Modifier.size(20.dp), color = White, strokeWidth = 2.dp)
-                        } else {
-                            Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Send", tint = White)
+                        TextField(
+                            value = messageText,
+                            onValueChange = onMessageChange,
+                            modifier = Modifier
+                                .weight(1f)
+                                .clip(RoundedCornerShape(24.dp)),
+                            placeholder = { Text("Type a message...", color = Color.Black.copy(alpha = 0.4f)) },
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = AppSurface.copy(alpha = 0.9f),
+                                unfocusedContainerColor = AppSurface.copy(alpha = 0.9f),
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                focusedTextColor = Color.Black,
+                                unfocusedTextColor = Color.Black
+                            ),
+                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
+                            keyboardActions = KeyboardActions(onSend = { onSendClick() })
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        IconButton(
+                            onClick = onSendClick,
+                            enabled = messageText.isNotBlank() && !isSending,
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .background(if (messageText.isNotBlank()) AppPrimary else AppSurface)
+                        ) {
+                            if (isSending) {
+                                CircularProgressIndicator(modifier = Modifier.size(20.dp), color = AppBackground, strokeWidth = 2.dp)
+                            } else {
+                                Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Send", tint = AppBackground)
+                            }
                         }
                     }
                 }
-            }
-        }
-    ) { padding ->
-        if (messages.isEmpty()) {
-            Box(modifier = Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
-                Text("No messages yet. Say hi!", color = MainPurple.copy(alpha = 0.5f))
-            }
-        } else {
-            LazyColumn(
-                state = listState,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(White)
-                    .padding(padding)
-                    .padding(horizontal = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(vertical = 16.dp)
-            ) {
-                items(messages) { message ->
-                    MessageBubble(message = message, isMine = message.senderId == currentUserId)
+            },
+            containerColor = Color.Transparent
+        ) { padding ->
+            if (messages.isEmpty()) {
+                Box(modifier = Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
+                    Text("No messages yet. Say hi!", color = AppPrimary.copy(alpha = 0.5f))
+                }
+            } else {
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding)
+                        .padding(horizontal = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(vertical = 16.dp)
+                ) {
+                    items(messages) { message ->
+                        MessageBubble(message = message, isMine = message.senderId == currentUserId)
+                    }
                 }
             }
         }
@@ -203,8 +209,8 @@ fun ChatContent(
 @Composable
 fun MessageBubble(message: Message, isMine: Boolean) {
     val alignment = if (isMine) Alignment.End else Alignment.Start
-    val bubbleColor = if (isMine) MainPurple else LightPurple
-    val textColor = if (isMine) White else MainPurple
+    val bubbleColor = if (isMine) AppPrimary else AppSurface
+    val textColor = if (isMine) AppBackground else Color.Black
     val shape = if (isMine) {
         RoundedCornerShape(16.dp, 16.dp, 2.dp, 16.dp)
     } else {
