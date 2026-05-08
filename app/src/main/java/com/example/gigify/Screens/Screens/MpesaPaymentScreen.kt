@@ -28,9 +28,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.gigify.Models.ViewModels.MpesaViewModel
 import com.example.gigify.ui.theme.*
 
-/**
- * Simplified M-Pesa Payment Screen focused on STK Push integration.
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MpesaPaymentScreen(navController: NavController, jobId: String, amount: String) {
@@ -47,10 +44,10 @@ fun MpesaPaymentScreen(navController: NavController, jobId: String, amount: Stri
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("M-Pesa Payment", color = Color.Black, fontWeight = FontWeight.Bold) },
+                title = { Text("M-Pesa Payment", color = MainPurple, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = DarkPurple)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = MainPurple)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = White)
@@ -70,35 +67,35 @@ fun MpesaPaymentScreen(navController: NavController, jobId: String, amount: Stri
             Text(
                 text = "Amount to Pay",
                 fontSize = 14.sp,
-                color = Color.Black.copy(alpha = 0.6f)
+                color = MainPurple.copy(alpha = 0.7f)
             )
             Text(
                 text = "KES $amount",
                 fontSize = 32.sp,
                 fontWeight = FontWeight.ExtraBold,
-                color = Color.Black
+                color = MainPurple
             )
             
             Spacer(modifier = Modifier.height(32.dp))
             
             Card(
-                colors = CardDefaults.cardColors(containerColor = White.copy(alpha = 0.8f)),
+                colors = CardDefaults.cardColors(containerColor = White.copy(alpha = 0.9f)),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Text(
                         text = "Payment via STK Push",
                         fontWeight = FontWeight.Bold,
-                        color = DarkPurple,
+                        color = MainPurple,
                         fontSize = 16.sp,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                     Text(
                         text = "Enter your phone number below. You will receive a prompt on your phone to enter your M-Pesa PIN.",
                         fontSize = 13.sp,
-                        color = Color.Black.copy(alpha = 0.7f),
+                        color = MainPurple.copy(alpha = 0.8f),
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
                     
@@ -114,9 +111,9 @@ fun MpesaPaymentScreen(navController: NavController, jobId: String, amount: Stri
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = MainPurple,
                             unfocusedBorderColor = LightPurple,
-                            focusedTextColor = Color.Black,
-                            unfocusedTextColor = Color.Black,
-                            focusedLabelColor = DarkPurple
+                            focusedTextColor = MainPurple,
+                            unfocusedTextColor = MainPurple,
+                            focusedLabelColor = MainPurple
                         )
                     )
                 }
@@ -135,7 +132,7 @@ fun MpesaPaymentScreen(navController: NavController, jobId: String, amount: Stri
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = DarkPurple),
+                colors = ButtonDefaults.buttonColors(containerColor = MainPurple),
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Text(
@@ -150,14 +147,14 @@ fun MpesaPaymentScreen(navController: NavController, jobId: String, amount: Stri
                 Spacer(modifier = Modifier.height(24.dp))
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = if (status.contains("Error")) Color(0xFFFFEBEE) else Color(0xFFE8F5E9)
+                        containerColor = LightPurple.copy(alpha = 0.5f)
                     ),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
                         text = status,
                         modifier = Modifier.padding(16.dp),
-                        color = if (status.contains("Error")) Color.Red else Color(0xFF2E7D32),
+                        color = MainPurple,
                         fontWeight = FontWeight.Medium,
                         textAlign = TextAlign.Center,
                         fontSize = 14.sp

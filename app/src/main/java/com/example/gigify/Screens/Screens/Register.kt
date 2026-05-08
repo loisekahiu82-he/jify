@@ -109,14 +109,14 @@ fun RegisterContent(
             text = "Create Account",
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Black
+            color = MainPurple
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             text = "Join Gigify to find trusted workers",
-            color = Color.Black.copy(alpha = 0.7f),
+            color = MainPurple.copy(alpha = 0.7f),
             fontSize = 14.sp
         )
 
@@ -132,8 +132,10 @@ fun RegisterContent(
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = MainPurple,
                 unfocusedBorderColor = LightPurple,
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black
+                focusedTextColor = MainPurple,
+                unfocusedTextColor = MainPurple,
+                focusedLabelColor = MainPurple,
+                unfocusedLabelColor = MainPurple.copy(alpha = 0.6f)
             )
         )
 
@@ -149,8 +151,10 @@ fun RegisterContent(
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = MainPurple,
                 unfocusedBorderColor = LightPurple,
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black
+                focusedTextColor = MainPurple,
+                unfocusedTextColor = MainPurple,
+                focusedLabelColor = MainPurple,
+                unfocusedLabelColor = MainPurple.copy(alpha = 0.6f)
             )
         )
 
@@ -166,8 +170,10 @@ fun RegisterContent(
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = MainPurple,
                 unfocusedBorderColor = LightPurple,
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black
+                focusedTextColor = MainPurple,
+                unfocusedTextColor = MainPurple,
+                focusedLabelColor = MainPurple,
+                unfocusedLabelColor = MainPurple.copy(alpha = 0.6f)
             )
         )
 
@@ -182,8 +188,10 @@ fun RegisterContent(
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = MainPurple,
                 unfocusedBorderColor = LightPurple,
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black
+                focusedTextColor = MainPurple,
+                unfocusedTextColor = MainPurple,
+                focusedLabelColor = MainPurple,
+                unfocusedLabelColor = MainPurple.copy(alpha = 0.6f)
             )
         )
 
@@ -191,7 +199,7 @@ fun RegisterContent(
         
         Text(
             text = "Register as a:",
-            color = DarkPurple,
+            color = MainPurple,
             fontWeight = FontWeight.SemiBold,
             fontSize = 14.sp,
             modifier = Modifier.align(Alignment.Start).padding(bottom = 8.dp)
@@ -207,7 +215,12 @@ fun RegisterContent(
                     onClick = { selectedRole = role },
                     label = { Text(role, modifier = Modifier.padding(8.dp)) },
                     modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(12.dp),
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = MainPurple,
+                        selectedLabelColor = White,
+                        labelColor = MainPurple
+                    )
                 )
             }
         }
@@ -224,8 +237,10 @@ fun RegisterContent(
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = MainPurple,
                 unfocusedBorderColor = LightPurple,
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black
+                focusedTextColor = MainPurple,
+                unfocusedTextColor = MainPurple,
+                focusedLabelColor = MainPurple,
+                unfocusedLabelColor = MainPurple.copy(alpha = 0.6f)
             )
         )
 
@@ -246,7 +261,7 @@ fun RegisterContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = DarkPurple),
+            colors = ButtonDefaults.buttonColors(containerColor = MainPurple),
             shape = RoundedCornerShape(12.dp)
         ) {
             if (authState is AuthViewModel.AuthState.Loading) {
@@ -264,12 +279,12 @@ fun RegisterContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         Row {
-            Text(text = "Already have an account? ", color = Color.Black.copy(alpha = 0.7f))
+            Text(text = "Already have an account? ", color = MainPurple.copy(alpha = 0.7f))
             TextButton(
                 onClick = { navController.navigate(ROUTE_LOGIN) },
                 contentPadding = PaddingValues(0.dp)
             ) {
-                Text("Login", color = DarkPurple, fontWeight = FontWeight.Bold)
+                Text("Login", color = MainPurple, fontWeight = FontWeight.Bold)
             }
         }
         

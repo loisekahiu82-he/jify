@@ -12,7 +12,7 @@ interface MpesaService {
         @Header("Authorization") authHeader: String
     ): Response<AccessTokenResponse>
 
-    @POST("mpesa/stkpush/v1/query")
+    @POST("mpesa/stkpush/v1/processrequest")
     suspend fun sendSTKPush(
         @Header("Authorization") authHeader: String,
         @Body request: STKPushRequest

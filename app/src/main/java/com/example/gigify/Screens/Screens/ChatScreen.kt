@@ -29,8 +29,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.gigify.Models.Message
 import com.example.gigify.Models.ViewModels.ChatViewModel
-import com.example.gigify.ui.theme.DarkPurple
-import com.example.gigify.ui.theme.GigifyTheme
+import com.example.gigify.ui.theme.*
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -109,32 +108,32 @@ fun ChatContent(
                             modifier = Modifier
                                 .size(40.dp)
                                 .clip(CircleShape)
-                                .background(DarkPurple),
+                                .background(MainPurple),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
                                 text = otherUserName.take(1).uppercase(),
-                                color = Color.White,
+                                color = White,
                                 fontWeight = FontWeight.Bold
                             )
                         }
                         Spacer(modifier = Modifier.width(12.dp))
                         Column {
-                            Text(otherUserName, color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                            Text("Active now", color = Color(0xFF4CAF50), fontSize = 11.sp)
+                            Text(otherUserName, color = MainPurple, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Text("Active now", color = MainPurple.copy(alpha = 0.7f), fontSize = 11.sp)
                         }
                     }
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = DarkPurple)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = MainPurple)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = White)
             )
         },
         bottomBar = {
-            Surface(shadowElevation = 8.dp, color = Color.White) {
+            Surface(shadowElevation = 4.dp, color = White) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -148,14 +147,14 @@ fun ChatContent(
                         modifier = Modifier
                             .weight(1f)
                             .clip(RoundedCornerShape(24.dp)),
-                        placeholder = { Text("Type a message...", color = Color.Gray) },
+                        placeholder = { Text("Type a message...", color = MainPurple.copy(alpha = 0.5f)) },
                         colors = TextFieldDefaults.colors(
-                            focusedContainerColor = Color(0xFFF5F5F5),
-                            unfocusedContainerColor = Color(0xFFF5F5F5),
+                            focusedContainerColor = LightPurple.copy(alpha = 0.2f),
+                            unfocusedContainerColor = LightPurple.copy(alpha = 0.2f),
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
-                            focusedTextColor = Color.Black,
-                            unfocusedTextColor = Color.Black
+                            focusedTextColor = MainPurple,
+                            unfocusedTextColor = MainPurple
                         ),
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
                         keyboardActions = KeyboardActions(onSend = { onSendClick() })
@@ -166,12 +165,12 @@ fun ChatContent(
                         enabled = messageText.isNotBlank() && !isSending,
                         modifier = Modifier
                             .clip(CircleShape)
-                            .background(if (messageText.isNotBlank()) DarkPurple else Color.Gray)
+                            .background(if (messageText.isNotBlank()) MainPurple else LightPurple)
                     ) {
                         if (isSending) {
-                            CircularProgressIndicator(modifier = Modifier.size(20.dp), color = Color.White, strokeWidth = 2.dp)
+                            CircularProgressIndicator(modifier = Modifier.size(20.dp), color = White, strokeWidth = 2.dp)
                         } else {
-                            Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Send", tint = Color.White)
+                            Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Send", tint = White)
                         }
                     }
                 }
@@ -180,14 +179,14 @@ fun ChatContent(
     ) { padding ->
         if (messages.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
-                Text("No messages yet. Say hi!", color = Color.Gray)
+                Text("No messages yet. Say hi!", color = MainPurple.copy(alpha = 0.5f))
             }
         } else {
             LazyColumn(
                 state = listState,
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xFFF8F9FA))
+                    .background(White)
                     .padding(padding)
                     .padding(horizontal = 12.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -204,8 +203,8 @@ fun ChatContent(
 @Composable
 fun MessageBubble(message: Message, isMine: Boolean) {
     val alignment = if (isMine) Alignment.End else Alignment.Start
-    val bubbleColor = if (isMine) DarkPurple else Color(0xFFE9E9EB)
-    val textColor = if (isMine) Color.White else Color.Black
+    val bubbleColor = if (isMine) MainPurple else LightPurple
+    val textColor = if (isMine) White else MainPurple
     val shape = if (isMine) {
         RoundedCornerShape(16.dp, 16.dp, 2.dp, 16.dp)
     } else {
@@ -225,7 +224,7 @@ fun MessageBubble(message: Message, isMine: Boolean) {
                 Text(
                     text = time,
                     fontSize = 10.sp,
-                    color = if (isMine) Color.White.copy(alpha = 0.7f) else Color.Gray,
+                    color = textColor.copy(alpha = 0.7f),
                     modifier = Modifier.align(Alignment.End)
                 )
             }

@@ -2,7 +2,6 @@ package com.example.gigify.Models.ViewModels
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,8 +11,6 @@ import com.example.gigify.Navigation.ROUTE_HOME
 import com.example.gigify.Navigation.ROUTE_LOGIN
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreSettings
-import com.google.firebase.firestore.MemoryCacheSettings
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,14 +38,6 @@ class AuthViewModel : ViewModel() {
     }
 
     init {
-        try {
-            val settings = FirebaseFirestoreSettings.Builder()
-                .setLocalCacheSettings(MemoryCacheSettings.newBuilder().build())
-                .build()
-            db.firestoreSettings = settings
-        } catch (e: Exception) {
-        }
-
         auth.addAuthStateListener { firebaseAuth ->
             if (firebaseAuth.currentUser != null) {
                 fetchCurrentUser()
@@ -78,7 +67,7 @@ class AuthViewModel : ViewModel() {
         context: Context
     ) {
         if (name.isEmpty() || email.isEmpty() || phone.isEmpty() || location.isEmpty() || pass.isEmpty()) {
-            Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Fields cannot be empty", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -99,14 +88,11 @@ class AuthViewModel : ViewModel() {
                     createdAt = System.currentTimeMillis()
                 )
 
-                db.collection("Users").document(uid).set(userData)
-                    .addOnFailureListener { e -> 
-                        Log.e("AuthVM", "Firestore Background Save Failed: ${e.message}")
-                    }
+                db.collection("Users").document(uid).set(userData).await()
 
                 withContext(Dispatchers.Main) {
                     _authState.value = AuthState.Success
-                    Toast.makeText(context, "Registration Complete! Please log in.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Account created! Please log in", Toast.LENGTH_SHORT).show()
                     auth.signOut()
                     navController.navigate(ROUTE_LOGIN) {
                         popUpTo(0) { inclusive = true }
@@ -114,8 +100,8 @@ class AuthViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    _authState.value = AuthState.Error(e.message ?: "Failed")
-                    Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                    _authState.value = AuthState.Error(e.message ?: "Registration failed")
+                    Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -123,7 +109,7 @@ class AuthViewModel : ViewModel() {
 
     fun loginUser(email: String, pass: String, navController: NavController, context: Context) {
         if (email.isEmpty() || pass.isEmpty()) {
-            Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Email and password required", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -132,32 +118,13 @@ class AuthViewModel : ViewModel() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     _authState.value = AuthState.Success
-                    Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
                     navController.navigate(ROUTE_HOME) {
                         popUpTo(ROUTE_HOME) { inclusive = true }
                     }
                 } else {
-                    _authState.value = AuthState.Error(task.exception?.message ?: "Login Failed")
-                    Toast.makeText(context, task.exception?.message, Toast.LENGTH_SHORT).show()
+                    _authState.value = AuthState.Error(task.exception?.message ?: "Login failed")
+                    Toast.makeText(context, "Invalid credentials", Toast.LENGTH_SHORT).show()
                 }
-            }
-    }
-
-    fun updateProfile(name: String, phone: String, location: String, context: Context, onSuccess: () -> Unit) {
-        val uid = auth.currentUser?.uid ?: return
-        val updates = mapOf(
-            "name" to name,
-            "phone" to phone,
-            "locationName" to location
-        )
-        
-        db.collection("Users").document(uid).update(updates)
-            .addOnSuccessListener {
-                Toast.makeText(context, "Profile updated", Toast.LENGTH_SHORT).show()
-                onSuccess()
-            }
-            .addOnFailureListener {
-                Toast.makeText(context, "Update failed", Toast.LENGTH_SHORT).show()
             }
     }
 
@@ -165,21 +132,53 @@ class AuthViewModel : ViewModel() {
         val uid = auth.currentUser?.uid ?: return
         _authState.value = AuthState.Loading
         
-        val fileRef = storage.reference.child("profile_pictures/$uid.jpg")
-        fileRef.putFile(uri)
-            .addOnSuccessListener {
-                fileRef.downloadUrl.addOnSuccessListener { downloadUrl ->
-                    db.collection("Users").document(uid).update("profilePhoto", downloadUrl.toString())
-                        .addOnSuccessListener {
-                            _authState.value = AuthState.Success
-                            Toast.makeText(context, "Photo uploaded", Toast.LENGTH_SHORT).show()
-                        }
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val ref = storage.reference.child("profile_pictures/$uid")
+                ref.putFile(uri).await()
+                val downloadUrl = ref.downloadUrl.await().toString()
+                
+                db.collection("Users").document(uid).update("profilePhoto", downloadUrl).await()
+                
+                withContext(Dispatchers.Main) {
+                    _authState.value = AuthState.Success
+                    Toast.makeText(context, "Profile picture updated", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _authState.value = AuthState.Error(e.message ?: "Upload failed")
+                    Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
                 }
             }
-            .addOnFailureListener { e ->
-                _authState.value = AuthState.Error(e.message ?: "Upload failed")
-                Toast.makeText(context, "Upload failed", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun updateProfile(name: String, phone: String, location: String, context: Context, onSuccess: () -> Unit) {
+        val uid = auth.currentUser?.uid ?: return
+        _authState.value = AuthState.Loading
+        
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val updates = mapOf(
+                    "name" to name,
+                    "phone" to phone,
+                    "locationName" to location
+                )
+                
+                db.collection("Users").document(uid).update(updates).await()
+                
+                withContext(Dispatchers.Main) {
+                    _authState.value = AuthState.Success
+                    Toast.makeText(context, "Profile updated successfully", Toast.LENGTH_SHORT).show()
+                    onSuccess()
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _authState.value = AuthState.Error(e.message ?: "Update failed")
+                    Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
+                }
             }
+        }
     }
 
     fun logout(navController: NavController) {

@@ -53,7 +53,7 @@ import com.example.gigify.ui.components.CategoryChip
 import com.example.gigify.ui.components.InfoBanner
 import com.example.gigify.ui.components.WorkerCard
 import com.example.gigify.ui.components.WorkerDisplay
-import com.example.gigify.ui.theme.DarkPurple
+import com.example.gigify.ui.theme.MainPurple
 import com.example.gigify.ui.theme.LightPurple
 import com.example.gigify.ui.theme.White
 
@@ -87,7 +87,7 @@ fun Home(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            Surface(shadowElevation = 4.dp) {
+            Surface(shadowElevation = 2.dp) {
                 TopAppBar(
                     title = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -102,7 +102,7 @@ fun Home(
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
                                 text = "Gigify",
-                                color = DarkPurple,
+                                color = MainPurple,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 20.sp
                             )
@@ -116,7 +116,7 @@ fun Home(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { navController.navigate(ROUTE_POST_JOB) },
-                containerColor = DarkPurple,
+                containerColor = MainPurple,
                 contentColor = White
             ) {
                 Text("+", fontSize = 24.sp)
@@ -132,13 +132,13 @@ fun Home(
             
             Text(
                 text = "Habari, $firstName",
-                color = Color.Black,
+                color = MainPurple,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold
             )
             Text(
                 text = "Find trusted workers near you",
-                color = Color.Black.copy(alpha = 0.6f),
+                color = MainPurple.copy(alpha = 0.6f),
                 fontSize = 14.sp
             )
 
@@ -148,13 +148,13 @@ fun Home(
                 value = search,
                 onValueChange = { search = it },
                 modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("Search e.g. plumber, cleaner...", color = DarkPurple.copy(alpha = 0.4f)) },
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = DarkPurple) },
+                placeholder = { Text("Search e.g. plumber, cleaner...", color = MainPurple.copy(alpha = 0.4f)) },
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = MainPurple) },
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedBorderColor = LightPurple,
-                    focusedBorderColor = DarkPurple,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black
+                    focusedBorderColor = MainPurple,
+                    focusedTextColor = MainPurple,
+                    unfocusedTextColor = MainPurple
                 ),
                 shape = RoundedCornerShape(12.dp),
                 singleLine = true
@@ -162,7 +162,7 @@ fun Home(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Text("Categories", color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Text("Categories", color = MainPurple, fontWeight = FontWeight.Bold, fontSize = 16.sp)
             Spacer(modifier = Modifier.height(8.dp))
 
             LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -179,7 +179,7 @@ fun Home(
 
             Text(
                 if (filteredList.isEmpty()) "No workers found" else "Available near you", 
-                color = Color.Black,
+                color = MainPurple,
                 fontWeight = FontWeight.Bold, 
                 fontSize = 16.sp
             )

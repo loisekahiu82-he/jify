@@ -56,122 +56,123 @@ fun LoginContent(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    val backgroundGradient = Brush.verticalGradient(
-        colors = listOf(LightPurple, White, MainPurple)
-    )
-
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(backgroundGradient)
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+            .background(AppGradient)
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.gigify_logo),
-            contentDescription = "Gigify Logo",
+        Column(
             modifier = Modifier
-                .size(120.dp)
-                .clip(CircleShape),
-            contentScale = ContentScale.Crop
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Text(
-            text = "Welcome Back",
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Enter your details to login",
-            color = Color.Black.copy(alpha = 0.7f),
-            fontSize = 14.sp
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Email Address") },
-            placeholder = { Text("example@mail.com") },
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            shape = RoundedCornerShape(12.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MainPurple,
-                unfocusedBorderColor = LightPurple,
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black,
-                focusedLabelColor = Color.Black,
-                unfocusedLabelColor = Color.Black.copy(alpha = 0.6f),
-                focusedContainerColor = White.copy(alpha = 0.5f),
-                unfocusedContainerColor = White.copy(alpha = 0.5f)
-            )
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Password") },
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            shape = RoundedCornerShape(12.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MainPurple,
-                unfocusedBorderColor = LightPurple,
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black,
-                focusedLabelColor = Color.Black,
-                unfocusedLabelColor = Color.Black.copy(alpha = 0.6f),
-                focusedContainerColor = White.copy(alpha = 0.5f),
-                unfocusedContainerColor = White.copy(alpha = 0.5f)
-            )
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Button(
-            onClick = {
-                onLoginClick(email, password)
-            },
-            enabled = authState !is AuthViewModel.AuthState.Loading,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = DarkPurple),
-            shape = RoundedCornerShape(12.dp)
+                .fillMaxSize()
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            if (authState is AuthViewModel.AuthState.Loading) {
-                CircularProgressIndicator(color = White, modifier = Modifier.size(24.dp))
-            } else {
-                Text(
-                    text = "Login",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = White
+            Image(
+                painter = painterResource(id = R.drawable.gigify_logo),
+                contentDescription = "Gigify Logo",
+                modifier = Modifier
+                    .size(120.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = "Welcome Back",
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold,
+                color = AppPrimary
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "Enter your details to login",
+                color = AppPrimary.copy(alpha = 0.7f),
+                fontSize = 14.sp
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("Email Address") },
+                placeholder = { Text("example@mail.com") },
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                shape = RoundedCornerShape(12.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = AppPrimary,
+                    unfocusedBorderColor = AppSurface,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    focusedLabelColor = AppPrimary,
+                    unfocusedLabelColor = AppPrimary.copy(alpha = 0.6f),
+                    focusedContainerColor = AppSurface.copy(alpha = 0.9f),
+                    unfocusedContainerColor = AppSurface.copy(alpha = 0.9f)
                 )
-            }
-        }
+            )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-        Row {
-            Text(text = "Don't have an account? ", color = Color.Black.copy(alpha = 0.7f))
-            TextButton(
-                onClick = { navController.navigate(ROUTE_REGISTER) },
-                contentPadding = PaddingValues(0.dp)
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("Password") },
+                visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                shape = RoundedCornerShape(12.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = AppPrimary,
+                    unfocusedBorderColor = AppSurface,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    focusedLabelColor = AppPrimary,
+                    unfocusedLabelColor = AppPrimary.copy(alpha = 0.6f),
+                    focusedContainerColor = AppSurface.copy(alpha = 0.9f),
+                    unfocusedContainerColor = AppSurface.copy(alpha = 0.9f)
+                )
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Button(
+                onClick = {
+                    onLoginClick(email, password)
+                },
+                enabled = authState !is AuthViewModel.AuthState.Loading,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = AppPrimary),
+                shape = RoundedCornerShape(12.dp)
             ) {
-                Text("Register", color = DarkPurple, fontWeight = FontWeight.Bold)
+                if (authState is AuthViewModel.AuthState.Loading) {
+                    CircularProgressIndicator(color = AppBackground, modifier = Modifier.size(24.dp))
+                } else {
+                    Text(
+                        text = "Login",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = AppBackground
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row {
+                Text(text = "Don't have an account? ", color = AppPrimary.copy(alpha = 0.7f))
+                TextButton(
+                    onClick = { navController.navigate(ROUTE_REGISTER) },
+                    contentPadding = PaddingValues(0.dp)
+                ) {
+                    Text("Register", color = AppPrimary, fontWeight = FontWeight.Bold)
+                }
             }
         }
     }

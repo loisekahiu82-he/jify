@@ -63,7 +63,6 @@ fun ViewWorker(navController: NavController, workerId: String) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Main texts changed to Black as requested
             Text("John Mwangi", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color.Black)
             Text("Professional Plumber", color = Color.Black.copy(alpha = 0.7f), fontSize = 16.sp)
 

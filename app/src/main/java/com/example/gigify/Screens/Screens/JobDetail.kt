@@ -37,10 +37,10 @@ fun JobDetail(navController: NavController, jobId: String) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Job Details", color = Color.Black, fontWeight = FontWeight.Bold) },
+                title = { Text("Job Details", color = MainPurple, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = DarkPurple)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = MainPurple)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = White)
@@ -65,14 +65,14 @@ fun JobDetail(navController: NavController, jobId: String) {
                     elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                 ) {
                     Column(modifier = Modifier.padding(20.dp)) {
-                        Text(currentJob.title, fontSize = 22.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-                        Text(currentJob.category, color = DarkPurple, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                        Text(currentJob.title, fontSize = 22.sp, fontWeight = FontWeight.Bold, color = MainPurple)
+                        Text(currentJob.category, color = MainPurple.copy(alpha = 0.7f), fontWeight = FontWeight.Bold, fontSize = 14.sp)
                         
                         Spacer(modifier = Modifier.height(20.dp))
                         
-                        Text("STATUS", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color.Gray)
+                        Text("STATUS", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MainPurple.copy(alpha = 0.6f))
                         Surface(
-                            color = if (currentJob.status == "pending") StatusOrangeBg else StatusGreenBg,
+                            color = LightPurple,
                             shape = RoundedCornerShape(8.dp),
                             modifier = Modifier.padding(top = 4.dp)
                         ) {
@@ -81,22 +81,22 @@ fun JobDetail(navController: NavController, jobId: String) {
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                                 fontSize = 10.sp,
                                 fontWeight = FontWeight.ExtraBold,
-                                color = if (currentJob.status == "pending") StatusOrangeText else StatusGreenText
+                                color = MainPurple
                             )
                         }
 
                         Spacer(modifier = Modifier.height(20.dp))
                         
-                        Text("BUDGET", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color.Gray)
-                        Text("KES ${currentJob.budget}", fontSize = 24.sp, fontWeight = FontWeight.ExtraBold, color = Color.Black)
+                        Text("BUDGET", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MainPurple.copy(alpha = 0.6f))
+                        Text("KES ${currentJob.budget}", fontSize = 24.sp, fontWeight = FontWeight.ExtraBold, color = MainPurple)
                     }
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
-                Text("Job Description", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                Text("Job Description", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = MainPurple)
                 Text(
                     currentJob.description.ifEmpty { "No description provided." },
-                    color = Color.Black.copy(alpha = 0.8f),
+                    color = MainPurple.copy(alpha = 0.8f),
                     lineHeight = 22.sp,
                     fontSize = 15.sp,
                     modifier = Modifier.padding(top = 8.dp)
@@ -108,7 +108,7 @@ fun JobDetail(navController: NavController, jobId: String) {
                     Button(
                         onClick = { /* Accept or Edit logic */ },
                         modifier = Modifier.fillMaxWidth().height(56.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = DarkPurple),
+                        colors = ButtonDefaults.buttonColors(containerColor = MainPurple),
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Text("Edit Job Post", color = White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
@@ -116,7 +116,7 @@ fun JobDetail(navController: NavController, jobId: String) {
                 }
             }
         } ?: Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator(color = DarkPurple)
+            CircularProgressIndicator(color = MainPurple)
         }
     }
 }

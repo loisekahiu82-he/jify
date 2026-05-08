@@ -39,8 +39,11 @@ class MpesaViewModel : ViewModel() {
     }
 
     fun initiateSTKPush(phoneNumber: String, amount: Int) {
+        val formattedPhone = formatPhoneNumber(phoneNumber)
+        
         viewModelScope.launch {
             try {
+                _paymentStatus.value = "Requesting token..."
                 val auth = Base64.encodeToString(
                     "${MpesaConfig.CONSUMER_KEY}:${MpesaConfig.CONSUMER_SECRET}".toByteArray(),
                     Base64.NO_WRAP
@@ -61,26 +64,36 @@ class MpesaViewModel : ViewModel() {
                         password = password,
                         timestamp = timestamp,
                         amount = amount,
-                        partyA = phoneNumber, // User's phone
+                        partyA = formattedPhone,
                         partyB = MpesaConfig.BUSINESS_SHORT_CODE,
-                        phoneNumber = phoneNumber,
-                        callBackURL = "https://your-domain.com/callback",
-                        accountReference = "Gigify Payment",
-                        transactionDesc = "Payment for Job"
+                        phoneNumber = formattedPhone,
+                        callBackURL = "https://my-secure-callback.com/api/mpesa",
+                        accountReference = "GigifyApp",
+                        transactionDesc = "Service Payment"
                     )
 
                     val response = mpesaService.sendSTKPush("Bearer $accessToken", request)
                     if (response.isSuccessful) {
-                        _paymentStatus.value = "Prompt sent to $phoneNumber"
+                        _paymentStatus.value = "Prompt sent to $formattedPhone"
                     } else {
-                        _paymentStatus.value = "Error: ${response.message()}"
+                        _paymentStatus.value = "Push failed: ${response.errorBody()?.string()}"
                     }
                 } else {
-                    _paymentStatus.value = "Failed to get token"
+                    _paymentStatus.value = "Authentication failed"
                 }
             } catch (e: Exception) {
-                _paymentStatus.value = "Exception: ${e.message}"
+                _paymentStatus.value = "Error: ${e.localizedMessage}"
             }
         }
+    }
+
+    private fun formatPhoneNumber(phone: String): String {
+        var formatted = phone.replace(" ", "").replace("+", "")
+        if (formatted.startsWith("0")) {
+            formatted = "254" + formatted.substring(1)
+        } else if (formatted.startsWith("7") || formatted.startsWith("1")) {
+            formatted = "254$formatted"
+        }
+        return formatted
     }
 }

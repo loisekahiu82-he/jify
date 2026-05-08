@@ -5,30 +5,29 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 
 private val DarkColorScheme = darkColorScheme(
-    primary = MainPurple,
-    secondary = MainPurple,
-    tertiary = MainPurple,
-    background = Color(0xFF121212),
-    surface = Color(0xFF1E1E1E),
-    onPrimary = White,
-    onSecondary = White,
-    onBackground = White,
-    onSurface = White
+    primary = AppPrimary,
+    secondary = AppSurface,
+    tertiary = AppPrimary,
+    background = AppBackground,
+    surface = AppSurface,
+    onPrimary = AppBackground,
+    onSecondary = AppPrimary,
+    onBackground = AppPrimary,
+    onSurface = AppPrimary
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = MainPurple,
-    secondary = MainPurple,
-    tertiary = MainPurple,
-    background = White,
-    surface = White,
-    onPrimary = White,
-    onSecondary = White,
-    onBackground = MainPurple,
-    onSurface = MainPurple
+    primary = AppPrimary,
+    secondary = AppSurface,
+    tertiary = AppPrimary,
+    background = AppBackground,
+    surface = AppSurface,
+    onPrimary = AppBackground,
+    onSecondary = AppPrimary,
+    onBackground = AppPrimary,
+    onSurface = AppPrimary
 )
 
 @Composable
@@ -36,6 +35,7 @@ fun GigifyTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
+    // Both themes use the same 3 colors as requested
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
 
     MaterialTheme(

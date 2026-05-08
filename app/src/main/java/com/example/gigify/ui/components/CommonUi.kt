@@ -39,15 +39,15 @@ fun CategoryChip(label: String, isSelected: Boolean, onClick: () -> Unit = {}) {
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(20.dp),
-        color = if (isSelected) DarkPurple else LightPurple.copy(alpha = 0.4f),
+        color = if (isSelected) MainPurple else LightPurple.copy(alpha = 0.4f),
         border = BorderStroke(
             width = 1.dp,
-            color = if (isSelected) DarkPurple else DarkPurple.copy(alpha = 0.1f)
+            color = if (isSelected) MainPurple else MainPurple.copy(alpha = 0.1f)
         )
     ) {
         Text(
             text = label,
-            color = if (isSelected) White else Color.Black,
+            color = if (isSelected) White else MainPurple,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             fontSize = 14.sp,
             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
@@ -72,7 +72,7 @@ fun WorkerCard(worker: WorkerDisplay, navController: NavController? = null) {
                 modifier = Modifier
                     .size(48.dp)
                     .clip(CircleShape)
-                    .background(DarkPurple),
+                    .background(MainPurple),
                 contentAlignment = Alignment.Center
             ) {
                 Text(worker.initials, color = White, fontWeight = FontWeight.Bold)
@@ -81,19 +81,19 @@ fun WorkerCard(worker: WorkerDisplay, navController: NavController? = null) {
             Spacer(modifier = Modifier.width(16.dp))
 
             Column(modifier = Modifier.weight(1f)) {
-                Text(worker.name, color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                Text("${worker.profession} · ${worker.distance}", color = Color.Black.copy(alpha = 0.6f), fontSize = 12.sp)
+                Text(worker.name, color = MainPurple, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text("${worker.profession} · ${worker.distance}", color = MainPurple.copy(alpha = 0.6f), fontSize = 12.sp)
                 
                 Spacer(modifier = Modifier.height(8.dp))
                 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Surface(
-                        color = if (worker.status.contains("Available")) Color(0xFFE8F5E9) else Color(0xFFFFF3E0),
+                        color = LightPurple.copy(alpha = 0.4f),
                         shape = RoundedCornerShape(8.dp)
                     ) {
                         Text(
                             worker.status,
-                            color = if (worker.status.contains("Available")) Color(0xFF2E7D32) else Color(0xFFE65100),
+                            color = MainPurple,
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Bold
@@ -103,11 +103,11 @@ fun WorkerCard(worker: WorkerDisplay, navController: NavController? = null) {
                     Icon(
                         Icons.Default.Star,
                         contentDescription = null,
-                        tint = Color(0xFFFFB300),
+                        tint = MainPurple,
                         modifier = Modifier.size(14.dp)
                     )
-                    Text(worker.rating, color = Color.Black, fontSize = 12.sp, modifier = Modifier.padding(start = 2.dp))
-                    Text("(${worker.reviews})", color = Color.Black.copy(alpha = 0.5f), fontSize = 12.sp)
+                    Text(worker.rating, color = MainPurple, fontSize = 12.sp, modifier = Modifier.padding(start = 2.dp))
+                    Text("(${worker.reviews})", color = MainPurple.copy(alpha = 0.5f), fontSize = 12.sp)
                 }
             }
 
@@ -116,11 +116,11 @@ fun WorkerCard(worker: WorkerDisplay, navController: NavController? = null) {
                     navController?.navigate(ROUTE_POST_JOB)
                 },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (worker.isButtonLight) White else DarkPurple,
-                    contentColor = if (worker.isButtonLight) DarkPurple else White
+                    containerColor = if (worker.isButtonLight) White else MainPurple,
+                    contentColor = if (worker.isButtonLight) MainPurple else White
                 ),
                 shape = RoundedCornerShape(8.dp),
-                modifier = if (worker.isButtonLight) Modifier.border(1.dp, DarkPurple, RoundedCornerShape(8.dp)) else Modifier,
+                modifier = if (worker.isButtonLight) Modifier.border(1.dp, MainPurple, RoundedCornerShape(8.dp)) else Modifier,
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
             ) {
                 Text(worker.buttonText)
@@ -134,7 +134,7 @@ fun InfoBanner() {
     Surface(
         color = LightPurple.copy(alpha = 0.3f),
         shape = RoundedCornerShape(12.dp),
-        modifier = Modifier.fillMaxWidth().border(1.dp, DarkPurple.copy(alpha = 0.1f), RoundedCornerShape(12.dp))
+        modifier = Modifier.fillMaxWidth().border(1.dp, MainPurple.copy(alpha = 0.1f), RoundedCornerShape(12.dp))
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
@@ -143,7 +143,7 @@ fun InfoBanner() {
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = "Pay securely via M-Pesa — no cash needed",
-                color = Color.Black,
+                color = MainPurple,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium
             )

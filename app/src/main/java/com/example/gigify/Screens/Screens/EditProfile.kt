@@ -58,22 +58,22 @@ fun EditProfile(navController: NavController) {
     }
 
     val backgroundGradient = Brush.verticalGradient(
-        colors = listOf(LightPurple, White, MainPurple)
+        colors = listOf(AppSurface, AppBackground, AppPrimary)
     )
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Edit Profile", color = Color.Black, fontWeight = FontWeight.Bold) },
+                title = { Text("Edit Profile", color = AppPrimary, fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = DarkPurple)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = AppPrimary)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = White)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = AppBackground)
             )
         },
-        containerColor = White
+        containerColor = AppBackground
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -88,7 +88,7 @@ fun EditProfile(navController: NavController) {
                 modifier = Modifier
                     .size(100.dp)
                     .clip(CircleShape)
-                    .background(LightPurple),
+                    .background(AppSurface),
                 contentAlignment = Alignment.Center
             ) {
                 if (userData?.profilePhoto?.isNotEmpty() == true) {
@@ -99,12 +99,12 @@ fun EditProfile(navController: NavController) {
                         contentScale = ContentScale.Crop
                     )
                 } else {
-                    Icon(Icons.Default.Person, contentDescription = null, modifier = Modifier.size(60.dp), tint = DarkPurple)
+                    Icon(Icons.Default.Person, contentDescription = null, modifier = Modifier.size(60.dp), tint = AppPrimary)
                 }
             }
             
             TextButton(onClick = { launcher.launch("image/*") }) {
-                Text("Change Profile Photo", color = DarkPurple, fontWeight = FontWeight.SemiBold)
+                Text("Change Profile Photo", color = AppPrimary, fontWeight = FontWeight.SemiBold)
             }
 
             OutlinedTextField(
@@ -114,11 +114,14 @@ fun EditProfile(navController: NavController) {
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MainPurple,
-                    unfocusedBorderColor = LightPurple,
+                    focusedBorderColor = AppPrimary,
+                    unfocusedBorderColor = AppSurface,
                     focusedTextColor = Color.Black,
                     unfocusedTextColor = Color.Black,
-                    focusedLabelColor = Color.Black
+                    focusedLabelColor = Color.Black,
+                    unfocusedLabelColor = Color.Black.copy(alpha = 0.6f),
+                    focusedContainerColor = AppSurface.copy(alpha = 0.8f),
+                    unfocusedContainerColor = AppSurface.copy(alpha = 0.8f)
                 )
             )
 
@@ -129,11 +132,14 @@ fun EditProfile(navController: NavController) {
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MainPurple,
-                    unfocusedBorderColor = LightPurple,
+                    focusedBorderColor = AppPrimary,
+                    unfocusedBorderColor = AppSurface,
                     focusedTextColor = Color.Black,
                     unfocusedTextColor = Color.Black,
-                    focusedLabelColor = Color.Black
+                    focusedLabelColor = Color.Black,
+                    unfocusedLabelColor = Color.Black.copy(alpha = 0.6f),
+                    focusedContainerColor = AppSurface.copy(alpha = 0.8f),
+                    unfocusedContainerColor = AppSurface.copy(alpha = 0.8f)
                 )
             )
 
@@ -144,11 +150,14 @@ fun EditProfile(navController: NavController) {
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MainPurple,
-                    unfocusedBorderColor = LightPurple,
+                    focusedBorderColor = AppPrimary,
+                    unfocusedBorderColor = AppSurface,
                     focusedTextColor = Color.Black,
                     unfocusedTextColor = Color.Black,
-                    focusedLabelColor = Color.Black
+                    focusedLabelColor = Color.Black,
+                    unfocusedLabelColor = Color.Black.copy(alpha = 0.6f),
+                    focusedContainerColor = AppSurface.copy(alpha = 0.8f),
+                    unfocusedContainerColor = AppSurface.copy(alpha = 0.8f)
                 )
             )
 
@@ -165,10 +174,10 @@ fun EditProfile(navController: NavController) {
                     }
                 },
                 modifier = Modifier.fillMaxWidth().height(56.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = DarkPurple),
+                colors = ButtonDefaults.buttonColors(containerColor = AppPrimary),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text("Save Changes", color = White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text("Save Changes", color = AppBackground, fontWeight = FontWeight.Bold, fontSize = 16.sp)
             }
         }
     }
